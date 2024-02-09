@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
 import FavoriteButton from './favorite-button';
 import {fetchTopAnime} from '../api/api.helper';
 import {colors, sizes, spacing} from '../constants/theme';
@@ -37,7 +36,7 @@ const TopAnime = () => {
           style={{marginHorizontal: spacing.l}}
           onPress={() => navigation.navigate('AnimeDetail', {detail: item})}>
           <View style={[styles.card, {elevation: 5}]}>
-            <FavoriteButton style={styles.favorite} />
+            <FavoriteButton style={styles.favorite} animeId={item.id} />
             <View style={styles.imageBox}>
               <Image
                 source={{uri: item.attributes.coverImage.tiny}}

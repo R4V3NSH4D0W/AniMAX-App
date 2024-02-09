@@ -75,7 +75,7 @@ const AnimeList = ({type}: IProps) => {
                     Episodes {item?.attributes?.episodeLength}
                   </Text>
                 </View>
-                <FavoriteButton />
+                <FavoriteButton animeId={item.id} />
               </View>
             </View>
           </TouchableOpacity>

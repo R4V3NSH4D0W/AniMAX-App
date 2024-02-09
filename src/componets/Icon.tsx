@@ -4,13 +4,13 @@ import {Image, TouchableOpacity} from 'react-native';
 import icons from '../constants/icons';
 
 interface IProps {
+  style?: any;
   onPress?: any;
   icon?: string;
-  style?: any;
   size?: number;
 }
 
-const Icon = ({onPress, icon, style, size = 32}: IProps) => {
+const Icon = ({onPress, icon, style, size = 32, color}: IProps) => {
   const image = (
     <Image
       source={icons[icon]}

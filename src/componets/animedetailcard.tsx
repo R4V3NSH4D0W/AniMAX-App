@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -5,13 +6,33 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import Button from '../utils/button';
+import {ICONS} from '../constants/app.constants';
+import {bookMark} from '../helper/bookmarkhelper';
+import {useToast} from 'react-native-toast-notifications';
 import {colors, sizes, spacing} from '../constants/theme';
 
 const AnimeDetailCard = ({data}) => {
   const [expanded, setExpanded] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+  const toast = useToast();
+
+  useEffect(() => {
+    checkIfBookmarked();
+  }, []);
+
+  const checkIfBookmarked = async () => {
+    const bookmarkedIds = await AsyncStorage.getItem('bookmarkedIds');
+    if (bookmarkedIds) {
+      const parsedIds = JSON.parse(bookmarkedIds);
+      if (parsedIds.includes(data.id.toString())) {
+        setBookmarked(true);
+      }
+    }
+  };
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
@@ -26,11 +47,11 @@ const AnimeDetailCard = ({data}) => {
   return (
     <View style={styles.card}>
       <Animatable.View
-        style={styles.header}
-        animation="fadeInUp"
         delay={500}
+        duration={400}
+        animation="fadeInUp"
         easing="ease-in-out"
-        duration={400}>
+        style={styles.header}>
         <Text style={styles.title}>
           {data?.attributes?.titles?.en || data?.attributes?.titles?.en_jp}
         </Text>
@@ -41,6 +62,13 @@ const AnimeDetailCard = ({data}) => {
           <Text style={styles.subTitle}>
             Status: {data?.attributes?.status}
           </Text>
+          <Button
+            hasIcon
+            bookmarked={bookmarked}
+            title={bookmarked ? 'Bookmarked' : 'Bookmark'}
+            iconName={ICONS.BOOKMARK}
+            onPress={() => bookMark(data.id, bookmarked, setBookmarked, toast)}
+          />
         </ScrollView>
       </Animatable.View>
     </View>
@@ -75,6 +103,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontSize: 22,
+    marginBottom: 12,
     fontWeight: 'bold',
     color: colors.white,
   },

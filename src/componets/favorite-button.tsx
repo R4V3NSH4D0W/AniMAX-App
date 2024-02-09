@@ -1,15 +1,40 @@
-/* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, View} from 'react-native';
-import React from 'react';
-import {colors, shadow} from '../constants/theme';
+import {View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Icon from './Icon';
+import {colors, shadow} from '../constants/theme';
 
 interface IProps {
   style?: any;
-  active?: boolean;
+  animeId: string;
 }
 
-const FavoriteButton = ({active, style}: IProps) => {
+const FavoriteButton = ({style, animeId}: IProps) => {
+  const [bookmarked, setBookmarked] = useState(false);
+
+  useEffect(() => {
+    const fetchBookmarkedStatus = async () => {
+      const isBookmarked = await checkIfBookmarked(animeId);
+      setBookmarked(isBookmarked);
+    };
+    fetchBookmarkedStatus();
+  }, [animeId]);
+
+  const checkIfBookmarked = async (animeId: string) => {
+    try {
+      const bookmarkedIds = await AsyncStorage.getItem('bookmarkedIds');
+      if (bookmarkedIds) {
+        const parsedIds = JSON.parse(bookmarkedIds);
+        return parsedIds.includes(animeId);
+      }
+      return false;
+    } catch (error) {
+      console.error('Error retrieving bookmarked IDs:', error);
+      return false;
+    }
+  };
+
   return (
     <View
       style={[
@@ -17,11 +42,9 @@ const FavoriteButton = ({active, style}: IProps) => {
         shadow.light,
         style,
       ]}>
-      <Icon icon={active ? 'FavoriteFilled' : 'Favorite'} size={24} />
+      <Icon icon={bookmarked ? 'FavoriteFilled' : 'Favorite'} size={24} />
     </View>
   );
 };
 
 export default FavoriteButton;
-
-const styles = StyleSheet.create({});
