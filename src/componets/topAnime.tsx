@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {fetchTopAnime} from '../api/api.healper';
 import {FlatList} from 'react-native-gesture-handler';
-import {colors, sizes, spacing} from '../constants/theme';
-import FavoriteButton from './favorite-button';
 import {useNavigation} from '@react-navigation/native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-const CARD_WIDTH = sizes.width - 90;
+import FavoriteButton from './favorite-button';
+import {fetchTopAnime} from '../api/api.helper';
+import {colors, sizes, spacing} from '../constants/theme';
+
 const CARD_HEIGHT = 200;
+const CARD_WIDTH = sizes.width - 90;
 const CARD_WIDTH_SPACING = CARD_WIDTH + spacing.l;
 
 const TopAnime = () => {
@@ -60,18 +61,18 @@ const TopAnime = () => {
 
 const styles = StyleSheet.create({
   card: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     marginRight: -18,
-    marginVertical: 10,
     borderRadius: 10,
+    width: CARD_WIDTH,
     overflow: 'hidden',
+    marginVertical: 10,
+    height: CARD_HEIGHT,
   },
   favorite: {
-    position: 'absolute',
+    zIndex: 1,
     top: spacing.m,
     right: spacing.m,
-    zIndex: 1,
+    position: 'absolute',
   },
   image: {
     width: '100%',
@@ -84,11 +85,11 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   textContainer: {
-    position: 'absolute',
-    bottom: 0,
     left: 0,
     right: 0,
+    bottom: 0,
     padding: 10,
+    position: 'absolute',
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   title: {

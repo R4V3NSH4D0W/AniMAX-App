@@ -1,11 +1,12 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import MainHeader from '../componets/MainHeader';
-import {colors} from '../constants/theme';
-import ScreenHeader from '../componets/screenHeader';
-import TopAnime from '../componets/topAnime';
 
+import TopAnime from '../componets/topAnime';
+import MainHeader from '../componets/MainHeader';
+import ScreenHeader from '../componets/screenHeader';
 import SectionHeader from '../componets/section-header';
+
+import {colors} from '../constants/theme';
 
 const HomeScreen = () => {
   const sectionHeaders = [

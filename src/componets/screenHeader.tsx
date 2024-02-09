@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+
 import {sizes, spacing} from '../constants/theme';
 
 interface IProps {
@@ -20,12 +21,12 @@ export default ScreenHeader;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: spacing.l,
     paddingVertical: spacing.l,
+    paddingHorizontal: spacing.l,
   },
   mainTitle: {
-    fontSize: sizes.title,
     fontWeight: 'bold',
+    fontSize: sizes.title,
   },
   secondTitle: {
     fontSize: sizes.h2,

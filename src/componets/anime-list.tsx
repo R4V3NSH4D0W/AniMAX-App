@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {Image, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+
 import FavoriteButton from './favorite-button';
 import {colors, sizes, spacing} from '../constants/theme';
-import {
-  fetchAnimeData,
-  fetchRecentAnime,
-  fetchTrendingAnime,
-} from '../api/api.healper';
-import {useNavigation} from '@react-navigation/native';
+import {fetchRecentAnime, fetchTrendingAnime} from '../api/api.helper';
 
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
@@ -54,7 +51,6 @@ const AnimeList = ({type}: IProps) => {
             onPress={() => navigation.navigate('AnimeDetail', {detail: item})}>
             <View style={[styles.card]} key={item.id}>
               <View style={styles.imageBox}>
-                {console.log(item.attributes?.posterImage)}
                 <Image
                   style={styles.image}
                   source={{
@@ -91,46 +87,46 @@ const AnimeList = ({type}: IProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     flexWrap: 'wrap',
+    flexDirection: 'row',
   },
   cardContainer: {
     marginLeft: spacing.l,
     marginBottom: spacing.l,
   },
   card: {
+    elevation: 3,
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    backgroundColor: colors.white,
     borderRadius: sizes.radius,
-    elevation: 3,
+    backgroundColor: colors.white,
   },
   imageBox: {
     width: CARD_WIDTH,
+    overflow: 'hidden',
     height: CARD_HEIGHT - 60,
     borderTopLeftRadius: sizes.radius,
     borderTopRightRadius: sizes.radius,
-    overflow: 'hidden',
   },
   image: {
     width: CARD_WIDTH,
-    height: CARD_HEIGHT - 60,
     resizeMode: 'cover',
+    height: CARD_HEIGHT - 60,
   },
   footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginTop: 6,
     marginLeft: 16,
     marginRight: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   titleBox: {
     flex: 1,
   },
   title: {
     marginVertical: 4,
-    fontSize: sizes.body,
     fontWeight: 'bold',
+    fontSize: sizes.body,
     color: colors.primary,
   },
   location: {

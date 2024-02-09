@@ -1,5 +1,6 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+
 import Icon from './Icon';
 import {sizes, spacing} from '../constants/theme';
 
@@ -23,9 +24,9 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.l,
     alignItems: 'center',
+    paddingHorizontal: spacing.l,
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: sizes.h3,

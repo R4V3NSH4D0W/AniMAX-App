@@ -5,28 +5,13 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {colors, sizes, spacing} from '../constants/theme';
+import React, {useState} from 'react';
 import * as Animatable from 'react-native-animatable';
-import {fetchAnimeData, testAnime} from '../api/api.healper';
+
+import {colors, sizes, spacing} from '../constants/theme';
 
 const AnimeDetailCard = ({data}) => {
   const [expanded, setExpanded] = useState(false);
-
-  const [gogoAnimeData, setgogoAnimeData] = useState([]);
-  console.log('gogoAnimeData', gogoAnimeData);
-  const title = data?.attributes?.canonicalTitle;
-  //   useEffect(() => {
-  //     const fetchGogoData = async () => {
-  //       const gogoData = await fetchAnimeData(title);
-  //       setgogoAnimeData(gogoData);
-  //     };
-  //     fetchGogoData();
-  //   }, [title]);
-
-  //   useEffect(() => {
-  //     testAnime();
-  //   });
 
   const toggleExpanded = () => {
     setExpanded(!expanded);

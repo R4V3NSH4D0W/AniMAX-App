@@ -1,11 +1,13 @@
 import React from 'react';
+import {StyleSheet, Animated} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
+
 import Icon from '../componets/Icon';
 import {colors, sizes} from '../constants/theme';
-import {StyleSheet, Animated} from 'react-native';
 
 const tabs = [
   {
@@ -83,13 +85,13 @@ const TabNavigator = () => {
 
 const styles = StyleSheet.create({
   indicator: {
-    position: 'absolute',
     width: 12,
     height: 2,
-    left: sizes.width / tabs.length / 2 - 6.5,
     bottom: 8,
-    backgroundColor: colors.primary,
     zIndex: 100,
+    position: 'absolute',
+    backgroundColor: colors.primary,
+    left: sizes.width / tabs.length / 2 - 6.5,
   },
 });
 

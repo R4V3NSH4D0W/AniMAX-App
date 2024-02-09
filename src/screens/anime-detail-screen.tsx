@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {colors, sizes, spacing} from '../constants/theme';
-import Icon from '../componets/Icon';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {SharedElement} from 'react-navigation-shared-element';
-import AnimeDetailCard from '../componets/animedetailcard';
 import * as Animatable from 'react-native-animatable';
+import {SharedElement} from 'react-navigation-shared-element';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
+import Icon from '../componets/Icon';
+import {colors, sizes, spacing} from '../constants/theme';
+import AnimeDetailCard from '../componets/animedetailcard';
 
 const AnimeDetail = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
