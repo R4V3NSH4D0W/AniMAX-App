@@ -1,49 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Image, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 
 import FavoriteButton from './favorite-button';
 import {colors, sizes, spacing} from '../constants/theme';
-import {fetchRecentAnime, fetchTrendingAnime} from '../api/api.helper';
 
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
 
-interface IProps {
-  type?: string;
-}
-
-const AnimeList = ({type}: IProps) => {
-  const [Anime, setAnime] = useState<any[]>([]);
-
-  useEffect(() => {
-    const getAnime = async () => {
-      const AnimeData = await fetchRecentAnime();
-      setAnime(AnimeData);
-    };
-    getAnime();
-  }, []);
-
-  useEffect(() => {
-    if (type === 'trending') {
-      const getAnime = async () => {
-        const AnimeData = await fetchTrendingAnime();
-        setAnime(AnimeData);
-      };
-
-      getAnime();
-    }
-  }, [type]);
-
+const AnimeList = ({animeData}) => {
   const truncate = (text: string, maxLength: number) => {
     return text.length > maxLength
       ? text.substring(0, maxLength) + '...'
       : text;
   };
+
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      {Anime.map(item => {
+      {animeData.map(item => {
         return (
           <TouchableOpacity
             style={styles.cardContainer}

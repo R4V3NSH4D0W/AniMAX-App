@@ -31,3 +31,8 @@ export const fetchTrendingAnime = async () => {
   const data = await response.json();
   return data.data;
 };
+
+export const fetchAnimeById = async (animeId: number) => {
+  const response = await axios.get(`${BASE_URL}/api/edge/anime/${animeId}`);
+  return response.data?.data || null;
+};

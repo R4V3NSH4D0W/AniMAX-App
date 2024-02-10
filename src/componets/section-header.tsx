@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import AnimeList from './anime-list';
+import {fetchRecentAnime} from '../api/api.helper';
 
 interface IProps {
   title?: string;
@@ -11,6 +12,17 @@ interface IProps {
   buttonTitle?: string;
 }
 const SectionHeader = ({title, onPress, buttonTitle, type}: IProps) => {
+  const [Anime, setAnime] = useState<any[]>([]);
+
+  useEffect(() => {
+    const getAnime = async () => {
+      const AnimeData = await fetchRecentAnime();
+      setAnime(AnimeData);
+    };
+    getAnime();
+  }, []);
+  console.log('AnimeSelector', Anime);
+
   return (
     <>
       <View style={styles.container}>
@@ -20,8 +32,7 @@ const SectionHeader = ({title, onPress, buttonTitle, type}: IProps) => {
           <Text style={styles.text}>{buttonTitle}</Text>
         </TouchableOpacity>
       </View>
-      <AnimeList />
-      <AnimeList type="trending" />
+      <AnimeList animeData={Anime} />
     </>
   );
 };
