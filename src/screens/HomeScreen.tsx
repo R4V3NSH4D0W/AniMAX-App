@@ -31,7 +31,7 @@ const HomeScreen = () => {
             title={section.title}
             type={section.type}
             buttonTitle={section.buttonTitle}
-            onPress={section.onPress}
+            onPress={() => {}}
           />
         ))}
       </ScrollView>

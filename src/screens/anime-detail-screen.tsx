@@ -41,7 +41,7 @@ const AnimeDetail = ({navigation, route}) => {
           <View style={styles.overlay} />
         </View>
       </SharedElement>
-      <AnimeDetailCard data={detail} />
+      <AnimeDetailCard data={detail.attributes} id={detail.id} />
     </View>
   );
 };

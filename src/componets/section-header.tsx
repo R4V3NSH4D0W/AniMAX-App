@@ -7,11 +7,11 @@ import {fetchRecentAnime} from '../api/api.helper';
 
 interface IProps {
   title?: string;
-  onPress?: void;
   type?: string;
   buttonTitle?: string;
+  onPress: () => void;
 }
-const SectionHeader = ({title, onPress, buttonTitle, type}: IProps) => {
+const SectionHeader = ({title, onPress, buttonTitle}: IProps) => {
   const [Anime, setAnime] = useState<any[]>([]);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ const SectionHeader = ({title, onPress, buttonTitle, type}: IProps) => {
     };
     getAnime();
   }, []);
-  console.log('AnimeSelector', Anime);
 
   return (
     <>

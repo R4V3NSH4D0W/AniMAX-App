@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Icon from './Icon';
 import {colors, shadow} from '../constants/theme';
+import {useIsFocused} from '@react-navigation/native';
 
 interface IProps {
   style?: any;
@@ -12,6 +13,7 @@ interface IProps {
 
 const FavoriteButton = ({style, animeId}: IProps) => {
   const [bookmarked, setBookmarked] = useState(false);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchBookmarkedStatus = async () => {
@@ -19,7 +21,7 @@ const FavoriteButton = ({style, animeId}: IProps) => {
       setBookmarked(isBookmarked);
     };
     fetchBookmarkedStatus();
-  }, [animeId]);
+  }, [animeId, isFocused]);
 
   const checkIfBookmarked = async (animeId: string) => {
     try {
@@ -30,7 +32,6 @@ const FavoriteButton = ({style, animeId}: IProps) => {
       }
       return false;
     } catch (error) {
-      console.error('Error retrieving bookmarked IDs:', error);
       return false;
     }
   };

@@ -14,8 +14,14 @@ import {ICONS} from '../constants/app.constants';
 import {bookMark} from '../helper/bookmarkhelper';
 import {useToast} from 'react-native-toast-notifications';
 import {colors, sizes, spacing} from '../constants/theme';
+import {IAttributes} from '../constants/app.type';
 
-const AnimeDetailCard = ({data}) => {
+interface IProps {
+  id: string;
+  data: IAttributes;
+}
+
+const AnimeDetailCard = ({data, id}: IProps) => {
   const [expanded, setExpanded] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const toast = useToast();
@@ -28,7 +34,7 @@ const AnimeDetailCard = ({data}) => {
     const bookmarkedIds = await AsyncStorage.getItem('bookmarkedIds');
     if (bookmarkedIds) {
       const parsedIds = JSON.parse(bookmarkedIds);
-      if (parsedIds.includes(data.id.toString())) {
+      if (parsedIds.includes(id.toString())) {
         setBookmarked(true);
       }
     }
@@ -39,9 +45,9 @@ const AnimeDetailCard = ({data}) => {
   };
 
   const descriptionText = expanded
-    ? data?.attributes?.description
-    : `${data?.attributes?.description?.slice(0, 500)}${
-        data?.attributes?.description.length > 500 ? '...' : ''
+    ? data?.description
+    : `${data?.description?.slice(0, 500)}${
+        data?.description.length > 500 ? '...' : ''
       }`;
 
   return (
@@ -53,21 +59,19 @@ const AnimeDetailCard = ({data}) => {
         easing="ease-in-out"
         style={styles.header}>
         <Text style={styles.title}>
-          {data?.attributes?.titles?.en || data?.attributes?.titles?.en_jp}
+          {data?.titles?.en || data?.titles?.en_jp}
         </Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           <TouchableOpacity onPress={toggleExpanded}>
             <Text style={styles.description}>{descriptionText}</Text>
           </TouchableOpacity>
-          <Text style={styles.subTitle}>
-            Status: {data?.attributes?.status}
-          </Text>
+          <Text style={styles.subTitle}>Status: {data?.status}</Text>
           <Button
             hasIcon
             bookmarked={bookmarked}
             title={bookmarked ? 'Bookmarked' : 'Bookmark'}
             iconName={ICONS.BOOKMARK}
-            onPress={() => bookMark(data.id, bookmarked, setBookmarked, toast)}
+            onPress={() => bookMark(id, bookmarked, setBookmarked, toast)}
           />
         </ScrollView>
       </Animatable.View>

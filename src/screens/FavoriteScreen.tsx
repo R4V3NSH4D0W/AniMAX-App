@@ -10,9 +10,9 @@ import {
 import {useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import AnimeList from '../componets/anime-list';
 import {fetchAnimeById} from '../api/api.helper';
 import MainHeader from '../componets/MainHeader';
-import AnimeList from '../componets/anime-list';
 
 const {height} = Dimensions.get('window');
 
@@ -76,8 +76,6 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   activityIndicatorContainer: {
     alignItems: 'center',

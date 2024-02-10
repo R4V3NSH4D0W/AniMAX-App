@@ -4,11 +4,18 @@ import {Image, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 
 import FavoriteButton from './favorite-button';
 import {colors, sizes, spacing} from '../constants/theme';
+import {IAnimeItems} from '../constants/app.type';
 
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
 
-const AnimeList = ({animeData}) => {
+interface AnimeListProps {
+  animeData: IAnimeItems[];
+}
+
+const AnimeList = (props: AnimeListProps) => {
+  const {animeData} = props;
+
   const truncate = (text: string, maxLength: number) => {
     return text.length > maxLength
       ? text.substring(0, maxLength) + '...'
@@ -16,6 +23,7 @@ const AnimeList = ({animeData}) => {
   };
 
   const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       {animeData.map(item => {

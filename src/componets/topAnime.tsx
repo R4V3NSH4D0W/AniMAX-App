@@ -5,13 +5,14 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import FavoriteButton from './favorite-button';
 import {fetchTopAnime} from '../api/api.helper';
 import {colors, sizes, spacing} from '../constants/theme';
+import {IAnimeItems} from '../constants/app.type';
 
 const CARD_HEIGHT = 200;
 const CARD_WIDTH = sizes.width - 90;
 const CARD_WIDTH_SPACING = CARD_WIDTH + spacing.l;
 
 const TopAnime = () => {
-  const [topAnime, setTopAnime] = useState([]);
+  const [topAnime, setTopAnime] = useState<IAnimeItems[]>([]);
 
   useEffect(() => {
     const getTopAnime = async () => {
@@ -48,7 +49,7 @@ const TopAnime = () => {
                 {item.attributes.titles?.en || item.attributes.titles?.en_us}
               </Text>
               <Text style={styles.subTitle}>
-                {item.attributes.titles?.Ja_jp || item.attributes.titles?.en_jp}
+                {item.attributes.titles?.ja_jp || item.attributes.titles?.en_jp}
               </Text>
             </View>
           </View>
