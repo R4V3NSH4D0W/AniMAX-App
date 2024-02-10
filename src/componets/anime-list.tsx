@@ -2,9 +2,10 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Image, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 
-import FavoriteButton from './favorite-button';
-import {colors, sizes, spacing} from '../constants/theme';
 import {IAnimeItems} from '../constants/app.type';
+import {colors, sizes, spacing} from '../constants/theme';
+
+import FavoriteButton from './favorite-button';
 
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
@@ -41,7 +42,8 @@ const AnimeList = (props: AnimeListProps) => {
                       item.attributes?.posterImage?.original ||
                       item.attributes?.posterImage?.tiny ||
                       item.attributes?.posterImage?.small ||
-                      item.attributes?.posterImage?.medium,
+                      item.attributes?.posterImage?.medium ||
+                      item.attributes.coverImage?.large,
                   }}
                 />
               </View>

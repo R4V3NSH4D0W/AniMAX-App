@@ -15,6 +15,7 @@ import {bookMark} from '../helper/bookmarkhelper';
 import {useToast} from 'react-native-toast-notifications';
 import {colors, sizes, spacing} from '../constants/theme';
 import {IAttributes} from '../constants/app.type';
+import {useDispatch, useSelector} from 'react-redux';
 
 interface IProps {
   id: string;
@@ -22,9 +23,14 @@ interface IProps {
 }
 
 const AnimeDetailCard = ({data, id}: IProps) => {
+  const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const toast = useToast();
+
+  const notificationCount = useSelector(
+    state => state.notification.notificationCount,
+  );
 
   useEffect(() => {
     checkIfBookmarked();
@@ -71,7 +77,16 @@ const AnimeDetailCard = ({data, id}: IProps) => {
             bookmarked={bookmarked}
             title={bookmarked ? 'Bookmarked' : 'Bookmark'}
             iconName={ICONS.BOOKMARK}
-            onPress={() => bookMark(id, bookmarked, setBookmarked, toast)}
+            onPress={() =>
+              bookMark(
+                id,
+                bookmarked,
+                setBookmarked,
+                toast,
+                dispatch,
+                notificationCount,
+              )
+            }
           />
         </ScrollView>
       </Animatable.View>

@@ -1,17 +1,16 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import MainNavigator from './src/navigations/MainNavigator';
-import {NativeModules} from 'react-native';
 
-const {NativeDevSettings} = NativeModules;
+import {Provider} from 'react-redux';
+import store from './src/store/store';
+
 const App = () => {
-  // useEffect(() => {
-  //   // Enable remote debugging in development mode
-  //   if (__DEV__) {
-  //     NativeDevSettings.setIsDebuggingRemotely(true);
-  //   }
-  // }, []);
-  return <MainNavigator />;
+  return (
+    <Provider store={store}>
+      <MainNavigator />
+    </Provider>
+  );
 };
 
 export default App;

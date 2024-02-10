@@ -1,6 +1,14 @@
+import {updateNotificationCount} from '../actions/action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const bookMark = async (animeId, bookmarked, setBookmarked, toast) => {
+export const bookMark = async (
+  animeId: string,
+  bookmarked: boolean,
+  setBookmarked: React.Dispatch<React.SetStateAction<boolean>>,
+  toast: any,
+  dispatch: any,
+  notificationCount: number,
+) => {
   try {
     const bookmarkedIds = await AsyncStorage.getItem('bookmarkedIds');
     let updatedIds = [];
@@ -22,6 +30,7 @@ export const bookMark = async (animeId, bookmarked, setBookmarked, toast) => {
       updatedIds.push(animeId.toString());
       await AsyncStorage.setItem('bookmarkedIds', JSON.stringify(updatedIds));
       setBookmarked(true);
+      dispatch(updateNotificationCount(notificationCount + 1));
       toast.show('', {
         type: 'custom_toast',
         data: {title: 'Bookmarked Successfully', type: 'success'},

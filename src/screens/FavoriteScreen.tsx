@@ -11,8 +11,10 @@ import {useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AnimeList from '../componets/anime-list';
-import {fetchAnimeById} from '../api/api.helper';
 import MainHeader from '../componets/MainHeader';
+
+import {colors} from '../constants/theme';
+import {fetchAnimeById} from '../api/api.helper';
 
 const {height} = Dimensions.get('window');
 
@@ -49,10 +51,10 @@ const FavoriteScreen = () => {
   }, [bookmarkedIds]);
 
   return (
-    <>
+    <View style={styles.main}>
       <MainHeader title="Favorite" />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.main}>
+        <View style={styles.content}>
           {isLoading ? (
             <View style={styles.activityIndicatorContainer}>
               <ActivityIndicator size="large" color="#0000ff" />
@@ -60,13 +62,13 @@ const FavoriteScreen = () => {
           ) : animeDetails.length > 0 ? (
             <AnimeList animeData={animeDetails} />
           ) : (
-            <Text style={styles.activityIndicatorContainer}>
-              No favorite anime found. oops
+            <Text style={styles.noFavoriteText}>
+              No favorite anime found. Oops!
             </Text>
           )}
         </View>
       </ScrollView>
-    </>
+    </View>
   );
 };
 
@@ -75,11 +77,20 @@ export default FavoriteScreen;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
+    backgroundColor: colors.light,
+  },
+  content: {
     marginTop: 20,
   },
   activityIndicatorContainer: {
+    flex: 1,
     alignItems: 'center',
     marginTop: height / 2.5,
     justifyContent: 'center',
+  },
+  noFavoriteText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: height / 2.5,
   },
 });

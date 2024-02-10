@@ -5,8 +5,8 @@ import {SharedElement} from 'react-navigation-shared-element';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Icon from '../componets/Icon';
-import {colors, sizes, spacing} from '../constants/theme';
 import AnimeDetailCard from '../componets/animedetailcard';
+import {colors, sizes, spacing} from '../constants/theme';
 
 const AnimeDetail = ({navigation, route}) => {
   const insets = useSafeAreaInsets();

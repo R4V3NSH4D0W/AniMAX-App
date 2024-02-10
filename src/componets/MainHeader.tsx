@@ -1,24 +1,28 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
 
 import Icon from './Icon';
 import {sizes, spacing} from '../constants/theme';
 
-interface IProps {
-  title: string;
-}
+const MainHeader = ({title}) => {
+  const notificationCount = useSelector(
+    state => state.notification.notificationCount,
+  );
 
-const MainHeader = ({title}: IProps) => {
   return (
     <View style={[styles.container]}>
       <Icon icon="Hamburger" onPress={() => {}} />
       <Text style={styles.title}>{title}</Text>
-      <Icon icon="Notification" />
+      <View style={styles.notificationContainer}>
+        <Icon icon="Notification" />
+        {notificationCount > 0 && (
+          <Text style={styles.notificationText}>{notificationCount}</Text>
+        )}
+      </View>
     </View>
   );
 };
-
-export default MainHeader;
 
 const styles = StyleSheet.create({
   container: {
@@ -32,4 +36,20 @@ const styles = StyleSheet.create({
     fontSize: sizes.h3,
     fontWeight: 'bold',
   },
+  notificationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  notificationText: {
+    left: 12,
+    bottom: 12,
+    marginLeft: 5,
+    color: 'white',
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    position: 'absolute',
+    backgroundColor: 'red',
+  },
 });
+
+export default MainHeader;
