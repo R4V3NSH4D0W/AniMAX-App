@@ -14,7 +14,7 @@ import AnimeList from '../componets/anime-list';
 import MainHeader from '../componets/MainHeader';
 
 import {colors} from '../constants/theme';
-import {fetchAnimeById} from '../api/api.helper';
+import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
 
 const {height} = Dimensions.get('window');
 
@@ -41,7 +41,7 @@ const FavoriteScreen = () => {
     const fetchAnimeDetails = async () => {
       setIsLoading(true);
       const details = await Promise.all(
-        bookmarkedIds.map(animeId => fetchAnimeById(animeId)),
+        bookmarkedIds.map(animeId => kitsuneeFetchAnimeInfo(animeId)),
       );
       setAnimeDetails(details.filter(detail => detail !== null));
       setIsLoading(false);

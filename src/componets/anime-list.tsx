@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Image, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 
-import {IAnimeItems} from '../constants/app.type';
+import {IKitsuneeInfo} from '../constants/app.type';
 import {colors, sizes, spacing} from '../constants/theme';
 
 import FavoriteButton from './favorite-button';
@@ -11,7 +11,7 @@ const CARD_HEIGHT = 220;
 const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
 
 interface AnimeListProps {
-  animeData: IAnimeItems[];
+  animeData: IKitsuneeInfo[];
 }
 
 const AnimeList = (props: AnimeListProps) => {
@@ -38,26 +38,15 @@ const AnimeList = (props: AnimeListProps) => {
                 <Image
                   style={styles.image}
                   source={{
-                    uri:
-                      item.attributes?.posterImage?.original ||
-                      item.attributes?.posterImage?.tiny ||
-                      item.attributes?.posterImage?.small ||
-                      item.attributes?.posterImage?.medium ||
-                      item.attributes.coverImage?.large,
+                    uri: item.image,
                   }}
                 />
               </View>
               <View style={styles.footer}>
                 <View style={styles.titleBox}>
-                  <Text style={styles.title}>
-                    {truncate(
-                      item.attributes?.titles?.en ||
-                        item.attributes?.titles?.en_jp,
-                      10,
-                    )}
-                  </Text>
+                  <Text style={styles.title}>{truncate(item.title, 10)}</Text>
                   <Text style={styles.location}>
-                    Episodes {item?.attributes?.episodeLength}
+                    Episodes {item?.episodeNumber}
                   </Text>
                 </View>
                 <FavoriteButton animeId={item.id} />

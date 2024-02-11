@@ -6,22 +6,24 @@ import {colors} from '../constants/theme';
 
 interface ButtonProps {
   title: string;
+  style?: any;
   bookmarked?: boolean;
   iconName?: string;
   hasIcon?: boolean;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const Button = ({
   title,
   onPress,
   hasIcon,
+  style,
   iconName,
   bookmarked,
 }: ButtonProps) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={styles.main(bookmarked)}>
+      <View style={[styles.main(bookmarked), style]}>
         {hasIcon ? (
           <Icons name={iconName as string} size={16} color="white" />
         ) : (

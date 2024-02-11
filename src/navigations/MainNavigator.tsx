@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {ToastProvider} from 'react-native-toast-notifications';
 
 import TabNavigator from './TabNavigator';
+import VideoPlayer from '../screens/videoPlayer';
 import ToastComponent from '../componets/toast/toast';
 import AnimeDetail from '../screens/anime-detail-screen';
 
@@ -30,6 +31,11 @@ const MainNavigator = () => {
           <Stack.Screen
             name="AnimeDetail"
             component={AnimeDetail}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="VideoPlayer"
+            component={VideoPlayer}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

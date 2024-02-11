@@ -6,20 +6,21 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import Button from '../utils/button';
-import {ICONS} from '../constants/app.constants';
-import {bookMark} from '../helper/bookmarkhelper';
-import {useToast} from 'react-native-toast-notifications';
-import {colors, sizes, spacing} from '../constants/theme';
-import {IAttributes} from '../constants/app.type';
 import {useDispatch, useSelector} from 'react-redux';
+import * as Animatable from 'react-native-animatable';
+import {useNavigation} from '@react-navigation/native';
+import {useToast} from 'react-native-toast-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '../utils/button';
+import {bookMark} from '../helper/bookmarkhelper';
+
+import {ICONS} from '../constants/app.constants';
+import {IKitsuneeInfo} from '../constants/app.type';
+import {colors, sizes, spacing} from '../constants/theme';
 
 interface IProps {
   id: string;
-  data: IAttributes;
+  data: IKitsuneeInfo;
 }
 
 const AnimeDetailCard = ({data, id}: IProps) => {
@@ -27,6 +28,7 @@ const AnimeDetailCard = ({data, id}: IProps) => {
   const [expanded, setExpanded] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const toast = useToast();
+  const navigation = useNavigation();
 
   const notificationCount = useSelector(
     state => state.notification.notificationCount,
@@ -53,8 +55,12 @@ const AnimeDetailCard = ({data, id}: IProps) => {
   const descriptionText = expanded
     ? data?.description
     : `${data?.description?.slice(0, 500)}${
-        data?.description.length > 500 ? '...' : ''
+        data?.description?.length > 500 ? '...' : ''
       }`;
+
+  const navigateToVideoPlayer = episode => {
+    navigation.navigate('VideoPlayer', {episodeData: episode});
+  };
 
   return (
     <View style={styles.card}>
@@ -64,9 +70,7 @@ const AnimeDetailCard = ({data, id}: IProps) => {
         animation="fadeInUp"
         easing="ease-in-out"
         style={styles.header}>
-        <Text style={styles.title}>
-          {data?.titles?.en || data?.titles?.en_jp}
-        </Text>
+        <Text style={styles.title}>{data.title}</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           <TouchableOpacity onPress={toggleExpanded}>
             <Text style={styles.description}>{descriptionText}</Text>
@@ -88,6 +92,17 @@ const AnimeDetailCard = ({data, id}: IProps) => {
               )
             }
           />
+          <View style={styles.episodesContainer}>
+            {data?.episodes?.map((episode, index) => (
+              <View key={index}>
+                <Button
+                  title={episode.number.toString()}
+                  style={styles.episodes}
+                  onPress={() => navigateToVideoPlayer(episode)}
+                />
+              </View>
+            ))}
+          </View>
         </ScrollView>
       </Animatable.View>
     </View>
@@ -117,7 +132,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     paddingTop: 10,
     paddingBottom: 10,
-    textAlign: 'justify',
     color: colors.white,
   },
   subTitle: {
@@ -125,6 +139,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontWeight: 'bold',
     color: colors.white,
+  },
+  episodes: {
+    marginTop: 20,
+    width: 50,
+    height: 50,
+    flexDirection: 'row',
+  },
+  episodesContainer: {
+    gap: 10,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
 });
 

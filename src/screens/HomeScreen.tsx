@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
 import TopAnime from '../componets/topAnime';
@@ -21,7 +21,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <MainHeader title="AniMAX" />
+      <MainHeader title="Kitsunee" />
       <ScreenHeader mainTitle="Find Your" secondTitle="Favorite Anime" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <TopAnime />

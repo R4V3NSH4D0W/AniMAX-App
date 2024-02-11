@@ -2,24 +2,26 @@ import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import FavoriteButton from './favorite-button';
-import {fetchTopAnime} from '../api/api.helper';
+import {kitsuneeFetchPopularAnime} from '../api/api.helper';
+
+import {IKitsuneePopular} from '../constants/app.type';
 import {colors, sizes, spacing} from '../constants/theme';
-import {IAnimeItems} from '../constants/app.type';
 
 const CARD_HEIGHT = 200;
 const CARD_WIDTH = sizes.width - 90;
 const CARD_WIDTH_SPACING = CARD_WIDTH + spacing.l;
 
 const TopAnime = () => {
-  const [topAnime, setTopAnime] = useState<IAnimeItems[]>([]);
+  const [topAnime, setTopAnime] = useState<IKitsuneePopular[]>([]);
 
   useEffect(() => {
-    const getTopAnime = async () => {
-      const topAnimeData = await fetchTopAnime();
-      setTopAnime(topAnimeData);
+    const getPopularAnime = async () => {
+      const result = await kitsuneeFetchPopularAnime();
+      setTopAnime(result);
     };
-    getTopAnime();
+    getPopularAnime();
   }, []);
 
   const navigation = useNavigation();
@@ -39,18 +41,10 @@ const TopAnime = () => {
           <View style={[styles.card, {elevation: 5}]}>
             <FavoriteButton style={styles.favorite} animeId={item.id} />
             <View style={styles.imageBox}>
-              <Image
-                source={{uri: item.attributes.coverImage.tiny}}
-                style={styles.image}
-              />
+              <Image source={{uri: item.image}} style={styles.image} />
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>
-                {item.attributes.titles?.en || item.attributes.titles?.en_us}
-              </Text>
-              <Text style={styles.subTitle}>
-                {item.attributes.titles?.ja_jp || item.attributes.titles?.en_jp}
-              </Text>
+              <Text style={styles.title}>{item.title}</Text>
             </View>
           </View>
         </TouchableOpacity>

@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import AnimeList from './anime-list';
-import {fetchRecentAnime} from '../api/api.helper';
+import {kitsuneeFetchRecentAnime} from '../api/api.helper';
 
 interface IProps {
   title?: string;
@@ -16,7 +16,7 @@ const SectionHeader = ({title, onPress, buttonTitle}: IProps) => {
 
   useEffect(() => {
     const getAnime = async () => {
-      const AnimeData = await fetchRecentAnime();
+      const AnimeData = await kitsuneeFetchRecentAnime();
       setAnime(AnimeData);
     };
     getAnime();
