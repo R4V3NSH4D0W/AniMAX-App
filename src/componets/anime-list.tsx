@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {Image, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 
 import {IKitsuneeInfo} from '../constants/app.type';
@@ -16,6 +17,13 @@ interface AnimeListProps {
 
 const AnimeList = (props: AnimeListProps) => {
   const {animeData} = props;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (animeData.length > 0) {
+      setIsLoading(false);
+    }
+  }, [animeData]);
 
   const truncate = (text: string, maxLength: number) => {
     return text.length > maxLength
@@ -27,8 +35,32 @@ const AnimeList = (props: AnimeListProps) => {
 
   return (
     <View style={styles.container}>
-      {animeData.map(item => {
-        return (
+      {isLoading || animeData.length === 0 ? (
+        <SkeletonPlaceholder>
+          <>
+            {[...Array(4)].map((_, index) => (
+              <View style={styles.cardContainer} key={index}>
+                <SkeletonPlaceholder.Item
+                  flexDirection="row"
+                  alignItems="center"
+                  gap={20}>
+                  <SkeletonPlaceholder.Item
+                    width={CARD_WIDTH}
+                    height={CARD_HEIGHT - 60}
+                    borderRadius={sizes.radius}
+                  />
+                  <SkeletonPlaceholder.Item
+                    width={CARD_WIDTH}
+                    height={CARD_HEIGHT - 60}
+                    borderRadius={sizes.radius}
+                  />
+                </SkeletonPlaceholder.Item>
+              </View>
+            ))}
+          </>
+        </SkeletonPlaceholder>
+      ) : (
+        animeData.map(item => (
           <TouchableOpacity
             style={styles.cardContainer}
             key={item.id}
@@ -53,8 +85,8 @@ const AnimeList = (props: AnimeListProps) => {
               </View>
             </View>
           </TouchableOpacity>
-        );
-      })}
+        ))
+      )}
     </View>
   );
 };

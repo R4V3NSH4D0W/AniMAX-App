@@ -4,6 +4,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import AnimeList from './anime-list';
 import {kitsuneeFetchRecentAnime} from '../api/api.helper';
+import {colors} from '../constants/theme';
 
 interface IProps {
   title?: string;
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: colors.black,
   },
   text: {
     color: 'blue',

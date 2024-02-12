@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import {sizes, spacing} from '../constants/theme';
+import {colors, sizes, spacing} from '../constants/theme';
 
 interface IProps {
   mainTitle: string;
@@ -26,9 +26,11 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     fontWeight: 'bold',
+    color: colors.black,
     fontSize: sizes.title,
   },
   secondTitle: {
     fontSize: sizes.h2,
+    color: colors.black,
   },
 });

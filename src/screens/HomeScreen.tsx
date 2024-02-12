@@ -10,12 +10,6 @@ import {colors} from '../constants/theme';
 
 const HomeScreen = () => {
   const sectionHeaders = [
-    {
-      title: 'Trending Anime',
-      type: 'trending',
-      buttonTitle: 'See All',
-      onPress: () => {},
-    },
     {title: 'Recent Anime', buttonTitle: 'See All', onPress: () => {}},
   ];
 
@@ -29,7 +23,6 @@ const HomeScreen = () => {
           <SectionHeader
             key={index}
             title={section.title}
-            type={section.type}
             buttonTitle={section.buttonTitle}
             onPress={() => {}}
           />

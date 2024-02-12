@@ -1,45 +1,83 @@
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import Video from 'react-native-video';
-import React, {useEffect, useState} from 'react';
+import Orientation from 'react-native-orientation-locker';
 
 import MainHeader from '../componets/MainHeader';
 import {KitsuneeFetchVideo} from '../api/api.helper';
+import {colors} from '../constants/theme';
+import Icons from 'react-native-vector-icons/FontAwesome6';
+import Collapse from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const VideoPlayer = ({route}) => {
+interface Source {
+  quality: string;
+  url: string;
+}
+
+interface Anime {
+  sources: Source[];
+}
+
+interface EpisodeData {
+  id: string;
+}
+
+interface Props {
+  route: {
+    params: {
+      episodeData: EpisodeData;
+    };
+  };
+}
+
+const VideoPlayer = ({route}: Props) => {
   const {episodeData} = route.params;
 
-  const [anime, setAnime] = useState(null);
-  const [videoUrl, setVideoUrl] = useState(null);
-  const [selectedQuality, setSelectedQuality] = useState(null);
+  const [anime, setAnime] = useState<Anime | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [selectedQuality, setSelectedQuality] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
     const fetchEpisode = async () => {
       const data = await KitsuneeFetchVideo(episodeData.id);
       setAnime(data);
       if (data && data.sources && data.sources.length > 0) {
-        setVideoUrl(data.sources[0].url);
-        setSelectedQuality(data.sources[0].quality);
+        setVideoUrl(data.sources[2].url);
+        setSelectedQuality(data.sources[2].quality);
         setIsLoading(false);
       }
     };
     fetchEpisode();
   }, [episodeData.id]);
 
-  const handleQualityChange = quality => {
-    const selectedSource = anime.sources.find(
+  const handleQualityChange = (quality: string) => {
+    const selectedSource = anime?.sources.find(
       source => source.quality === quality,
     );
     if (selectedSource) {
       setVideoUrl(selectedSource.url);
       setSelectedQuality(quality);
     }
+  };
+
+  const toggleFullScreen = async () => {
+    if (isFullScreen) {
+      await Orientation.lockToPortrait();
+      StatusBar.setHidden(false);
+    } else {
+      await Orientation.lockToLandscape();
+      StatusBar.setHidden(true);
+    }
+    setIsFullScreen(!isFullScreen);
   };
 
   if (isLoading) {
@@ -60,28 +98,48 @@ const VideoPlayer = ({route}) => {
   }
 
   return (
-    <View>
-      <MainHeader title="Kitsunee" />
-      <Text style={styles.title}>{episodeData.id}</Text>
-      <Video
-        source={{uri: videoUrl}}
-        style={styles.video}
-        controls={true}
-        resizeMode="contain"
-      />
-      <View style={styles.qualityButtonsContainer}>
-        {anime.sources.map(source => (
-          <TouchableOpacity
-            key={source.quality}
-            style={[
-              styles.qualityButton,
-              selectedQuality === source.quality &&
-                styles.selectedQualityButton,
-            ]}
-            onPress={() => handleQualityChange(source.quality)}>
-            <Text>{source.quality}</Text>
-          </TouchableOpacity>
-        ))}
+    <View style={styles.container}>
+      {!isFullScreen && (
+        <>
+          <MainHeader title="Kitsunee" />
+          <Text style={styles.title}>{episodeData.id}</Text>
+        </>
+      )}
+
+      <View style={styles.videoContainer}>
+        <TouchableOpacity
+          onPress={toggleFullScreen}
+          style={styles.fullScreenButtonContainer(isFullScreen)}>
+          <Text style={styles.fullScreenButton}>
+            {isFullScreen ? (
+              <Icons name="expand" size={20} color={colors.white} />
+            ) : (
+              <Collapse name="arrow-collapse" size={20} color={colors.white} />
+            )}
+          </Text>
+        </TouchableOpacity>
+        <Video
+          source={{uri: videoUrl}}
+          style={isFullScreen ? styles.fullScreenVideo : styles.video}
+          controls={true}
+          resizeMode="contain"
+        />
+        {!isFullScreen && (
+          <View style={styles.qualityButtonsContainer}>
+            {anime.sources.map(source => (
+              <TouchableOpacity
+                key={source.quality}
+                style={[
+                  styles.qualityButton,
+                  selectedQuality === source.quality &&
+                    styles.selectedQualityButton,
+                ]}
+                onPress={() => handleQualityChange(source.quality)}>
+                <Text>{source.quality}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -90,9 +148,19 @@ const VideoPlayer = ({route}) => {
 export default VideoPlayer;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  videoContainer: {
+    flex: 1,
+  },
   video: {
     width: '100%',
     height: 300,
+  },
+  fullScreenVideo: {
+    flex: 1,
+    backgroundColor: colors.black,
   },
   loadingContainer: {
     flex: 1,
@@ -109,10 +177,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingVertical: 8,
+    paddingHorizontal: 10,
     borderColor: 'gray',
     marginHorizontal: 5,
-    paddingHorizontal: 10,
     backgroundColor: 'white',
+    color: colors.black,
   },
   selectedQualityButton: {
     backgroundColor: 'lightgray',
@@ -121,5 +190,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 20,
     paddingLeft: 10,
+    color: colors.black,
+  },
+
+  fullScreenButtonContainer: (isFullScreen: boolean) => ({
+    position: 'absolute',
+    top: isFullScreen ? 10 : 50,
+    right: 10,
+    zIndex: 1,
+  }),
+  fullScreenButton: {
+    padding: 10,
+    borderRadius: 5,
   },
 });

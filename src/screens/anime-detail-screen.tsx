@@ -12,10 +12,10 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Icon from '../componets/Icon';
 import AnimeDetailCard from '../componets/animedetailcard';
-import {colors, sizes, spacing} from '../constants/theme';
+import {colors, spacing} from '../constants/theme';
 import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
 
-const {height} = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 const AnimeDetail = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
@@ -59,7 +59,7 @@ const AnimeDetail = ({navigation, route}) => {
                 source={{
                   uri: animeDetail.image,
                 }}
-                style={[StyleSheet.absoluteFillObject, styles.image]}
+                style={styles.image}
               />
               <View style={styles.overlay} />
             </View>
@@ -92,8 +92,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   image: {
-    width: sizes.width,
-    height: sizes.height,
+    flex: 1,
+    width: width,
+    height: height,
     resizeMode: 'cover',
   },
   backButton: {
@@ -114,7 +115,6 @@ const styles = StyleSheet.create({
   activityIndicatorContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: height / 12,
     justifyContent: 'center',
   },
 });

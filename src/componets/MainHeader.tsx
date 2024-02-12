@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import Icon from './Icon';
-import {sizes, spacing} from '../constants/theme';
+import {colors, sizes, spacing} from '../constants/theme';
 
 const MainHeader = ({title}) => {
   const notificationCount = useSelector(
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: sizes.h3,
     fontWeight: 'bold',
+    color: colors.black,
   },
   notificationContainer: {
     flexDirection: 'row',
