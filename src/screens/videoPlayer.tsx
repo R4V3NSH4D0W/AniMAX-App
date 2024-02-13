@@ -33,12 +33,14 @@ interface Props {
   route: {
     params: {
       episodeData: EpisodeData;
+      allEpisodes: EpisodeData;
     };
   };
 }
 
 const VideoPlayer = ({route}: Props) => {
-  const {episodeData} = route.params;
+  const {episodeData, allEpisodes} = route.params;
+  console.log(allEpisodes, 'allEpisodes');
 
   const [anime, setAnime] = useState<Anime | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -102,7 +104,7 @@ const VideoPlayer = ({route}: Props) => {
       {!isFullScreen && (
         <>
           <MainHeader title="Kitsunee" />
-          <Text style={styles.title}>{episodeData.id}</Text>
+          <Text style={styles.title}>{episodeData.id.replace(/-/g, ' ')}</Text>
         </>
       )}
 
@@ -135,7 +137,7 @@ const VideoPlayer = ({route}: Props) => {
                     styles.selectedQualityButton,
                 ]}
                 onPress={() => handleQualityChange(source.quality)}>
-                <Text>{source.quality}</Text>
+                <Text style={{color: 'black'}}>{source.quality}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -150,6 +152,7 @@ export default VideoPlayer;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.light,
   },
   videoContainer: {
     flex: 1,
@@ -178,18 +181,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 10,
-    borderColor: 'gray',
+    borderColor: colors.black,
     marginHorizontal: 5,
     backgroundColor: 'white',
-    color: colors.black,
   },
   selectedQualityButton: {
     backgroundColor: 'lightgray',
   },
   title: {
     fontSize: 16,
-    paddingTop: 20,
-    paddingLeft: 10,
+    paddingTop: 30,
+    paddingLeft: 30,
+    fontWeight: '500',
     color: colors.black,
   },
 

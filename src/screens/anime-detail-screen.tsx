@@ -11,9 +11,9 @@ import {SharedElement} from 'react-navigation-shared-element';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Icon from '../componets/Icon';
-import AnimeDetailCard from '../componets/animedetailcard';
 import {colors, spacing} from '../constants/theme';
 import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
+import AnimeDetailCard from '../componets/animedetailcard';
 
 const {height, width} = Dimensions.get('window');
 

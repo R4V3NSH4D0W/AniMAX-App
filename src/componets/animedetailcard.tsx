@@ -58,8 +58,8 @@ const AnimeDetailCard = ({data, id}: IProps) => {
         data?.description?.length > 500 ? '...' : ''
       }`;
 
-  const navigateToVideoPlayer = episode => {
-    navigation.navigate('VideoPlayer', {episodeData: episode});
+  const navigateToVideoPlayer = (episode, allEpisodes) => {
+    navigation.navigate('VideoPlayer', {episodeData: episode, allEpisodes});
   };
 
   return (
@@ -98,7 +98,7 @@ const AnimeDetailCard = ({data, id}: IProps) => {
                 <Button
                   title={episode.number.toString()}
                   style={styles.episodes}
-                  onPress={() => navigateToVideoPlayer(episode)}
+                  onPress={() => navigateToVideoPlayer(episode, data.episodes)}
                 />
               </View>
             ))}

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
 import TopAnime from '../componets/topAnime';

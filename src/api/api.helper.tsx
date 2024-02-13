@@ -24,3 +24,9 @@ export const KitsuneeFetchVideo = async (episode: string) => {
   const data = response.json();
   return data;
 };
+
+export const KitsuneeSearch = async (query: string) => {
+  const response = await fetch(`https://kitsunee.me/api/anime/search/${query}`);
+  const data = response.json();
+  return data;
+};

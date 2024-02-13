@@ -77,7 +77,7 @@ const AnimeList = (props: AnimeListProps) => {
               <View style={styles.footer}>
                 <View style={styles.titleBox}>
                   <Text style={styles.title}>{truncate(item.title, 10)}</Text>
-                  <Text style={styles.location}>
+                  <Text style={styles.episode}>
                     Episodes {item?.episodeNumber}
                   </Text>
                 </View>
@@ -101,11 +101,12 @@ const styles = StyleSheet.create({
     marginBottom: spacing.l,
   },
   card: {
-    elevation: 3,
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     borderRadius: sizes.radius,
     backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   imageBox: {
     width: CARD_WIDTH,
@@ -135,10 +136,9 @@ const styles = StyleSheet.create({
     fontSize: sizes.body,
     color: colors.primary,
   },
-  location: {
+  episode: {
     fontSize: sizes.body,
     color: colors.lightGray,
   },
 });
-
 export default AnimeList;
