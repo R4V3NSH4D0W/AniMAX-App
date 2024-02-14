@@ -13,10 +13,11 @@ const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
 
 interface AnimeListProps {
   animeData: IKitsuneeInfo[];
+  isSearchResult?: boolean;
 }
 
 const AnimeList = (props: AnimeListProps) => {
-  const {animeData} = props;
+  const {animeData, isSearchResult} = props;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -77,9 +78,13 @@ const AnimeList = (props: AnimeListProps) => {
               <View style={styles.footer}>
                 <View style={styles.titleBox}>
                   <Text style={styles.title}>{truncate(item.title, 10)}</Text>
-                  <Text style={styles.episode}>
-                    Episodes {item?.episodeNumber}
-                  </Text>
+                  {isSearchResult ? (
+                    <Text style={styles.subOrDub}>{item?.subOrDub}</Text>
+                  ) : (
+                    <Text style={styles.episode}>
+                      Episodes {item?.episodeNumber || item?.episodes?.length}
+                    </Text>
+                  )}
                 </View>
                 <FavoriteButton animeId={item.id} />
               </View>
@@ -139,6 +144,10 @@ const styles = StyleSheet.create({
   episode: {
     fontSize: sizes.body,
     color: colors.lightGray,
+  },
+  subOrDub: {
+    fontWeight: 'bold',
+    color: colors.black,
   },
 });
 export default AnimeList;

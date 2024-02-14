@@ -1,4 +1,3 @@
-// Import necessary components and libraries
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
@@ -9,11 +8,13 @@ import {
   Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {kitsuneeFetchPopularAnime} from '../api/api.helper';
-import FavoriteButton from './favorite-button';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
 import {IKitsuneePopular} from '../constants/app.type';
 import {colors, sizes, spacing} from '../constants/theme';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
+import FavoriteButton from './favorite-button';
+import {kitsuneeFetchPopularAnime} from '../api/api.helper';
 
 const CARD_HEIGHT = 200;
 const CARD_WIDTH = sizes.width - 90;
@@ -93,7 +94,6 @@ const TopAnime = () => {
   );
 };
 
-// Define component styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -128,15 +128,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: CARD_WIDTH,
     height: CARD_HEIGHT / 3,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   textContainer: {
-    position: 'absolute',
-    bottom: 10,
     left: 10,
     right: 10,
+    bottom: 10,
+    position: 'absolute',
   },
   title: {
     fontSize: sizes.h3,

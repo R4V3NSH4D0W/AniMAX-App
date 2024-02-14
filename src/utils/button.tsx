@@ -10,6 +10,7 @@ interface ButtonProps {
   bookmarked?: boolean;
   iconName?: string;
   hasIcon?: boolean;
+  isCurrentEpisode: boolean;
   onPress?: () => void;
 }
 
@@ -20,10 +21,11 @@ const Button = ({
   style,
   iconName,
   bookmarked,
+  isCurrentEpisode,
 }: ButtonProps) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={[styles.main(bookmarked), style]}>
+      <View style={[styles.main(bookmarked, isCurrentEpisode), style]}>
         {hasIcon ? (
           <Icons name={iconName as string} size={16} color="white" />
         ) : (
@@ -38,7 +40,7 @@ const Button = ({
 export default Button;
 
 const styles = StyleSheet.create({
-  main: (disabled: boolean) => ({
+  main: (disabled: boolean, isCurrentEpisode: boolean) => ({
     gap: 10,
     padding: 10,
     width: '40%',
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: disabled ? colors.gray : colors.purple,
+    backgroundColor: disabled || isCurrentEpisode ? colors.gray : colors.purple,
   }),
   text: {
     color: colors.white,

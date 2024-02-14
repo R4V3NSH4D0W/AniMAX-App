@@ -12,7 +12,6 @@ import {colors} from '../constants/theme';
 import MainHeader from '../componets/MainHeader';
 import {KitsuneeSearch, kitsuneeFetchRecentAnime} from '../api/api.helper';
 import AnimeList from '../componets/anime-list';
-import TopAnime from '../componets/topAnime';
 
 const SearchScreen = () => {
   const searchInputRef = useRef<TextInput>(null);
@@ -30,7 +29,7 @@ const SearchScreen = () => {
       setSearchResults(result);
     };
 
-    const searchTimeout = setTimeout(search, 500);
+    const searchTimeout = setTimeout(search, 1000);
 
     return () => clearTimeout(searchTimeout);
   }, [searchQuery]);
@@ -52,12 +51,13 @@ const SearchScreen = () => {
             ref={searchInputRef}
             placeholder="Search.."
             value={searchQuery}
+            placeholderTextColor={colors.black}
             onChangeText={text => setSearchQuery(text)}
             onSubmitEditing={dismissKeyboard}
           />
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
             <View style={styles.searchIcon}>
-              <Icons name="search" size={20} />
+              <Icons name="search" size={20} color={colors.black} />
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -72,7 +72,7 @@ const SearchScreen = () => {
           <ScrollView
             keyboardShouldPersistTaps="handled"
             style={styles.resultsContainer}>
-            <AnimeList animeData={searchResults} />
+            <AnimeList animeData={searchResults} isSearchResult />
           </ScrollView>
         )}
       </View>
@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   searchIcon: {
-    position: 'absolute',
     top: 12,
     right: 10,
+    position: 'absolute',
   },
   resultsContainer: {
     flex: 1,
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   searchInput: {
     width: '100%',
     height: '100%',
+    color: colors.black,
   },
 });
 

@@ -11,7 +11,7 @@ export interface IKitsuneeInfo {
   title: string;
   url: string;
   genres: string[];
-  totalEpisodes: number;
+  episodeNumber: number;
   image: string;
   releaseDate: string;
   description: string;

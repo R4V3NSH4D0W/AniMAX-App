@@ -17,6 +17,7 @@ import {bookMark} from '../helper/bookmarkhelper';
 import {ICONS} from '../constants/app.constants';
 import {IKitsuneeInfo} from '../constants/app.type';
 import {colors, sizes, spacing} from '../constants/theme';
+import {storeEpisodes} from '../actions/action';
 
 interface IProps {
   id: string;
@@ -33,6 +34,9 @@ const AnimeDetailCard = ({data, id}: IProps) => {
   const notificationCount = useSelector(
     state => state.notification.notificationCount,
   );
+  useEffect(() => {
+    dispatch(storeEpisodes(data.episodes));
+  }, [data.episodes, dispatch]);
 
   useEffect(() => {
     checkIfBookmarked();

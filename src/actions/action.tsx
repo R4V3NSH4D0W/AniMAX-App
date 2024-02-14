@@ -4,3 +4,10 @@ export const updateNotificationCount = count => ({
   type: UPDATE_NOTIFICATION_COUNT,
   payload: count,
 });
+
+export const STORE_EPISODES = 'STORE_EPISODES';
+
+export const storeEpisodes = episodes => ({
+  type: STORE_EPISODES,
+  payload: episodes,
+});
