@@ -66,6 +66,7 @@ const SearchScreen = () => {
         </View>
         {searchQuery.length === 0 && (
           <ScrollView
+            showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             style={styles.resultsContainer}>
             <AnimeList animeData={Anime} />
@@ -73,6 +74,7 @@ const SearchScreen = () => {
         )}
         {searchQuery.length > 0 && (
           <ScrollView
+            showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             style={styles.resultsContainer}>
             <AnimeList animeData={searchResults} isSearchResult />

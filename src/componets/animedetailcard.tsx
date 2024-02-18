@@ -85,7 +85,11 @@ const AnimeDetailCard = ({data, id}: IProps) => {
           <TouchableOpacity onPress={toggleExpanded}>
             <Text style={styles.description}>{descriptionText}</Text>
           </TouchableOpacity>
+          <Text style={styles.subText}>{data?.otherName}</Text>
           <Text style={styles.subTitle}>Status: {data?.status}</Text>
+          <Text style={styles.subText}>Release Date: {data?.releaseDate}</Text>
+          <Text style={styles.subText}>Genre: {data?.genres?.join(', ')}</Text>
+
           <Button
             hasIcon
             bookmarked={bookmarked}
@@ -147,6 +151,12 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 22,
     marginBottom: 12,
+    fontWeight: 'bold',
+    color: colors.white,
+  },
+  subText: {
+    fontSize: 16,
+    marginBottom: 8,
     fontWeight: 'bold',
     color: colors.white,
   },

@@ -9,7 +9,6 @@ import useTheme from '../helper/themHelper';
 
 const HomeScreen = () => {
   const theme = useTheme();
-  console.log(theme, 'theme');
   const sectionHeaders = [
     {title: 'Recent Anime', buttonTitle: 'See All', onPress: () => {}},
   ];

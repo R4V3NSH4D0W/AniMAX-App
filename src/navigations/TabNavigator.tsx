@@ -52,7 +52,7 @@ const TabNavigator = () => {
                       icon={name}
                       size={40}
                       style={{
-                        tintColor: focused ? colors.primary : colors.gray,
+                        tintColor: focused ? theme.textColor : colors.gray,
                       }}
                     />
                   );
@@ -72,6 +72,7 @@ const TabNavigator = () => {
       </Tab.Navigator>
       <Animated.View
         style={[
+          {backgroundColor: theme.textColor},
           styles.indicator,
           {
             transform: [
@@ -93,7 +94,6 @@ const styles = StyleSheet.create({
     bottom: 8,
     zIndex: 100,
     position: 'absolute',
-    backgroundColor: colors.primary,
     left: sizes.width / tabs.length / 2 - 6.5,
   },
 });

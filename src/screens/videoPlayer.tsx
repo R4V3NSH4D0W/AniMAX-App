@@ -8,20 +8,21 @@ import {
   StatusBar,
   Dimensions,
   ImageBackground,
+  BackHandler,
 } from 'react-native';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
 import Icons from 'react-native-vector-icons/FontAwesome6';
 import Collapse from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../constants/theme';
-import MainHeader from '../componets/MainHeader'; // Correct import path
+import MainHeader from '../componets/MainHeader';
 import {KitsuneeFetchVideo} from '../api/api.helper';
 import Button from '../utils/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {IStyles} from '../constants/app.type';
 import useTheme from '../helper/themHelper';
+import {Picker} from '@react-native-picker/picker';
 
 interface Source {
   quality: string;
@@ -75,7 +76,34 @@ const VideoPlayer = ({route}: Props) => {
       }
     };
     fetchEpisode();
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackButtonPress,
+    );
+
+    return () => backHandler.remove();
   }, [episodeData.id]);
+
+  useEffect(() => {
+    if (isFullScreen) {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        handleBackButtonPress,
+      );
+      return () => {
+        backHandler.remove();
+      };
+    }
+  }, [isFullScreen]);
+
+  const handleBackButtonPress = () => {
+    if (isFullScreen) {
+      toggleFullScreen();
+      return true;
+    }
+    return false;
+  };
 
   const handleQualityChange = (quality: string) => {
     const selectedSource = anime?.sources.find(
@@ -162,37 +190,43 @@ const VideoPlayer = ({route}: Props) => {
             resizeMode="contain"
           />
         )}
+
         {!isFullScreen && (
-          <View style={styles.qualityButtonsContainer}>
-            {anime.sources.map(source => (
-              <TouchableOpacity
-                key={source.quality}
-                style={[
-                  styles.qualityButton,
-                  selectedQuality === source.quality &&
-                    styles.selectedQualityButton,
-                ]}
-                onPress={() => handleQualityChange(source.quality)}>
-                <Text style={{color: 'black'}}>{source.quality}</Text>
-              </TouchableOpacity>
-            ))}
+          <View style={[styles.pickerContainer]}>
+            <Text style={styles.qualityText}>Quality</Text>
+            <Picker
+              selectedValue={selectedQuality}
+              onValueChange={itemValue => handleQualityChange(itemValue)}
+              style={styles.picker}>
+              {anime.sources.map((source, index) => (
+                <Picker.Item
+                  key={index}
+                  label={source.quality}
+                  value={source.quality}
+                />
+              ))}
+            </Picker>
           </View>
         )}
+
         {!isFullScreen && (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.episodesContainer}>
-            {storedEpisodes.map(episode => (
-              <View key={episode.number}>
-                <Button
-                  isCurrentEpisode={currentEpisode(episode.id)}
-                  title={episode.number.toString()}
-                  style={styles.episodes}
-                  onPress={() => navigateToVideoPlayer(episode)}
-                />
-              </View>
-            ))}
-          </ScrollView>
+          <View style={styles.episode}>
+            <Text style={styles.episodeText}>Episodes</Text>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.episodesContainer}>
+              {storedEpisodes.map(episode => (
+                <View key={episode.number}>
+                  <Button
+                    isCurrentEpisode={currentEpisode(episode.id)}
+                    title={episode.number.toString()}
+                    style={styles.episodes}
+                    onPress={() => navigateToVideoPlayer(episode)}
+                  />
+                </View>
+              ))}
+            </ScrollView>
+          </View>
         )}
       </View>
     </ImageBackground>
@@ -237,22 +271,20 @@ const styles = StyleSheet.create<any>({
     justifyContent: 'center',
   },
   qualityButton: {
-    borderWidth: 1,
     borderRadius: 5,
     paddingVertical: 8,
     marginHorizontal: 5,
     paddingHorizontal: 8,
-    backgroundColor: 'white',
-    borderColor: colors.black,
+    backgroundColor: colors.purple,
   },
   selectedQualityButton: {
-    backgroundColor: 'lightgray',
+    backgroundColor: colors.darkPurple,
   },
   title: {
     fontSize: 16,
     paddingTop: 30,
     paddingLeft: 30,
-    fontWeight: '500',
+    fontWeight: '700',
     color: colors.white,
   },
 
@@ -286,5 +318,31 @@ const styles = StyleSheet.create<any>({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  episodeText: {
+    fontSize: 18,
+    marginLeft: 29,
+    fontWeight: 'bold',
+    color: colors.white,
+  },
+  pickerContainer: {
+    marginLeft: 29,
+    width: 140,
+    zIndex: 999,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  fullScreenPicker: {
+    top: 50,
+  },
+  picker: {
+    width: '100%',
+    height: 40,
+    color: colors.white,
+  },
+  qualityText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });

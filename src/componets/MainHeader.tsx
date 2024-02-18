@@ -25,7 +25,7 @@ const MainHeader = ({title, whiteHeader}: Iprops) => {
         style={styles.color(whiteHeader, theme)}
         onPress={() => {}}
       />
-      <Text style={styles.title(whiteHeader, theme)}>{title}</Text>
+      <Text style={[{color: theme.textColor}, styles.title]}>{title}</Text>
       <View style={styles.notificationContainer}>
         <Icon icon="Notification" style={styles.color(whiteHeader, theme)} />
         {notificationCount > 0 && (
@@ -44,12 +44,10 @@ const styles = StyleSheet.create<any>({
     paddingHorizontal: spacing.l,
     justifyContent: 'space-between',
   },
-  title: (whiteHeader: boolean, theme: Theme) => ({
+  title: {
     fontSize: sizes.h3,
     fontWeight: 'bold',
-    // color: whiteHeader ? colors.white : colors.black,
-    colors: theme.backgroundColor,
-  }),
+  },
   notificationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -65,8 +63,7 @@ const styles = StyleSheet.create<any>({
     backgroundColor: 'red',
   },
   color: (whiteHeader: boolean, theme: Theme) => ({
-    // tintColor: whiteHeader ? colors.white : colors.black,
-    tintColor: theme?.tintColor,
+    tintColor: whiteHeader ? colors.white : theme.tintColor,
   }),
 });
 
