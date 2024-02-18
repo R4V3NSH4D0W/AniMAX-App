@@ -5,13 +5,21 @@ import TopAnime from '../componets/topAnime';
 import MainHeader from '../componets/MainHeader';
 import ScreenHeader from '../componets/screenHeader';
 import SectionHeader from '../componets/section-header';
-
-import {colors} from '../constants/theme';
+import useTheme from '../helper/themHelper';
 
 const HomeScreen = () => {
+  const theme = useTheme();
+  console.log(theme, 'theme');
   const sectionHeaders = [
     {title: 'Recent Anime', buttonTitle: 'See All', onPress: () => {}},
   ];
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.backgroundColor,
+    },
+  });
 
   return (
     <View style={styles.container}>
@@ -33,10 +41,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.light,
-  },
-});

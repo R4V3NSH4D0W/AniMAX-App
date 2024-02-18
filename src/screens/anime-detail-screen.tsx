@@ -14,10 +14,12 @@ import Icon from '../componets/Icon';
 import {colors, spacing} from '../constants/theme';
 import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
 import AnimeDetailCard from '../componets/animedetailcard';
+import useTheme from '../helper/themHelper';
 
 const {height, width} = Dimensions.get('window');
 
-const AnimeDetail = ({navigation, route}) => {
+const AnimeDetail = ({navigation, route}: any) => {
+  const theme = useTheme();
   const insets = useSafeAreaInsets();
   const {detail} = route.params;
 
@@ -67,7 +69,11 @@ const AnimeDetail = ({navigation, route}) => {
           <AnimeDetailCard data={animeDetail} id={animeDetail.id} />
         </>
       ) : (
-        <View style={styles.activityIndicatorContainer}>
+        <View
+          style={[
+            {backgroundColor: theme.backgroundColor},
+            styles.activityIndicatorContainer,
+          ]}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}

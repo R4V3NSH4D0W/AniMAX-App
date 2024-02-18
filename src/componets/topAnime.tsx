@@ -15,12 +15,14 @@ import {colors, sizes, spacing} from '../constants/theme';
 
 import FavoriteButton from './favorite-button';
 import {kitsuneeFetchPopularAnime} from '../api/api.helper';
+import useTheme from '../helper/themHelper';
 
 const CARD_HEIGHT = 200;
 const CARD_WIDTH = sizes.width - 90;
 const CARD_WIDTH_SPACING = CARD_WIDTH + spacing.l;
 
 const TopAnime = () => {
+  const theme = useTheme();
   const [topAnime, setTopAnime] = useState<IKitsuneePopular[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +40,7 @@ const TopAnime = () => {
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <SkeletonPlaceholder>
+        <SkeletonPlaceholder backgroundColor={theme.backgroundColor}>
           <SkeletonPlaceholder.Item flexDirection="row" alignItems="center">
             {[...Array(4)].map((_, index) => (
               <View key={index} style={styles.card}>

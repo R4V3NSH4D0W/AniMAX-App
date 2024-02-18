@@ -9,7 +9,16 @@ export const colors = {
   lightGray: '#b2b2b2',
   light: '#fbfbfb',
   white: '#fff',
-  black: '#000',
+  black: '#080808',
+  brown: '#493E32',
+  lightBlue: '#A1B1BC',
+  darkBlue: '#56728e',
+  orange: '#b8ga18',
+  blue: '#6390ob7',
+  gold: '#cb913e',
+  darkGray: '#292929',
+  midGray: '#353535',
+  midLightGray: '#202123',
 };
 
 export const shadow = {

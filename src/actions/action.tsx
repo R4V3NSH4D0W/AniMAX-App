@@ -7,7 +7,10 @@ export const updateNotificationCount = count => ({
 
 export const STORE_EPISODES = 'STORE_EPISODES';
 
-export const storeEpisodes = episodes => ({
+export const storeEpisodes = (episodes, image) => ({
   type: STORE_EPISODES,
-  payload: episodes,
+  payload: {
+    episodes: episodes,
+    image: image,
+  },
 });

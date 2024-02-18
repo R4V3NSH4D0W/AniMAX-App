@@ -10,7 +10,7 @@ interface ButtonProps {
   bookmarked?: boolean;
   iconName?: string;
   hasIcon?: boolean;
-  isCurrentEpisode: boolean;
+  isCurrentEpisode?: boolean;
   onPress?: () => void;
 }
 

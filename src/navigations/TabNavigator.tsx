@@ -8,6 +8,7 @@ import FavoriteScreen from '../screens/FavoriteScreen';
 
 import Icon from '../componets/Icon';
 import {colors, sizes} from '../constants/theme';
+import useTheme from '../helper/themHelper';
 
 const tabs = [
   {
@@ -27,6 +28,7 @@ const tabs = [
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const theme = useTheme();
   const offsetAnimation = React.useRef(new Animated.Value(0)).current;
   return (
     <>
@@ -35,6 +37,7 @@ const TabNavigator = () => {
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
+          tabBarStyle: {backgroundColor: theme.backgroundColor},
         }}>
         {tabs.map(({name, screen}, index) => {
           return (

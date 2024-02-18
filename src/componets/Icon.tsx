@@ -10,11 +10,18 @@ interface IProps {
   size?: number;
 }
 
-const Icon = ({onPress, icon, style, size = 32}: IProps) => {
+const Icon = ({onPress, icon, style, size = 32, whiteIcon}: IProps) => {
   const image = (
     <Image
       source={icons[icon]}
-      style={[{width: size, height: size, resizeMode: 'cover'}, style]}
+      style={[
+        {
+          width: size,
+          height: size,
+          resizeMode: 'cover',
+        },
+        style,
+      ]}
     />
   );
 

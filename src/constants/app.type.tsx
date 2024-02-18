@@ -27,3 +27,7 @@ export interface Episode {
   number: number;
   url: string;
 }
+
+export interface IStyles {
+  [key: string]: any;
+}

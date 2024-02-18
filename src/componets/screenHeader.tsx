@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import {colors, sizes, spacing} from '../constants/theme';
+import {sizes, spacing} from '../constants/theme';
+import useTheme from '../helper/themHelper';
+import {Theme} from '../constants/themeProvider';
 
 interface IProps {
   mainTitle: string;
@@ -9,28 +11,29 @@ interface IProps {
 }
 
 const ScreenHeader = ({mainTitle, secondTitle}: IProps) => {
+  const theme = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.mainTitle}>{mainTitle}</Text>
-      <Text style={styles.secondTitle}>{secondTitle}</Text>
+      <Text style={styles.mainTitle(theme)}>{mainTitle}</Text>
+      <Text style={styles.secondTitle(theme)}>{secondTitle}</Text>
     </View>
   );
 };
 
 export default ScreenHeader;
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     paddingVertical: spacing.l,
     paddingHorizontal: spacing.l,
   },
-  mainTitle: {
+  mainTitle: (theme: Theme) => ({
     fontWeight: 'bold',
-    color: colors.black,
+    color: theme.textColor,
     fontSize: sizes.title,
-  },
-  secondTitle: {
+  }),
+  secondTitle: (theme: Theme) => ({
     fontSize: sizes.h2,
-    color: colors.black,
-  },
+    color: theme.textColor,
+  }),
 });

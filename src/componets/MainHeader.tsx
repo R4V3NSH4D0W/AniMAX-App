@@ -4,18 +4,30 @@ import {useSelector} from 'react-redux';
 
 import Icon from './Icon';
 import {colors, sizes, spacing} from '../constants/theme';
+import useTheme from '../helper/themHelper';
+import {Theme} from '../constants/themeProvider';
 
-const MainHeader = ({title}) => {
+interface Iprops {
+  title: string;
+  whiteHeader?: boolean;
+}
+
+const MainHeader = ({title, whiteHeader}: Iprops) => {
+  const theme = useTheme();
   const notificationCount = useSelector(
     state => state.notification.notificationCount,
   );
 
   return (
     <View style={[styles.container]}>
-      <Icon icon="Hamburger" onPress={() => {}} />
-      <Text style={styles.title}>{title}</Text>
+      <Icon
+        icon="Hamburger"
+        style={styles.color(whiteHeader, theme)}
+        onPress={() => {}}
+      />
+      <Text style={styles.title(whiteHeader, theme)}>{title}</Text>
       <View style={styles.notificationContainer}>
-        <Icon icon="Notification" />
+        <Icon icon="Notification" style={styles.color(whiteHeader, theme)} />
         {notificationCount > 0 && (
           <Text style={styles.notificationText}>{notificationCount}</Text>
         )}
@@ -24,7 +36,7 @@ const MainHeader = ({title}) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     marginTop: 20,
     flexDirection: 'row',
@@ -32,11 +44,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.l,
     justifyContent: 'space-between',
   },
-  title: {
+  title: (whiteHeader: boolean, theme: Theme) => ({
     fontSize: sizes.h3,
     fontWeight: 'bold',
-    color: colors.black,
-  },
+    // color: whiteHeader ? colors.white : colors.black,
+    colors: theme.backgroundColor,
+  }),
   notificationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -51,6 +64,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'red',
   },
+  color: (whiteHeader: boolean, theme: Theme) => ({
+    // tintColor: whiteHeader ? colors.white : colors.black,
+    tintColor: theme?.tintColor,
+  }),
 });
 
 export default MainHeader;

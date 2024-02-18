@@ -6,18 +6,22 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StatusBar,
+  Dimensions,
+  ImageBackground,
 } from 'react-native';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
 import Icons from 'react-native-vector-icons/FontAwesome6';
 import Collapse from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../constants/theme';
-import MainHeader from '../componets/MainHeader';
+import MainHeader from '../componets/MainHeader'; // Correct import path
 import {KitsuneeFetchVideo} from '../api/api.helper';
 import Button from '../utils/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {IStyles} from '../constants/app.type';
+import useTheme from '../helper/themHelper';
 
 interface Source {
   quality: string;
@@ -36,13 +40,18 @@ interface Props {
   route: {
     params: {
       episodeData: EpisodeData;
+      image: string;
     };
   };
 }
 
+const {width} = Dimensions.get('window');
 const VideoPlayer = ({route}: Props) => {
   const {episodeData} = route.params;
 
+  const theme = useTheme();
+
+  const image = useSelector(state => state.episodes.image);
   const storedEpisodes = useSelector(state => state.episodes.episodes);
 
   const [anime, setAnime] = useState<Anime | null>(null);
@@ -91,8 +100,12 @@ const VideoPlayer = ({route}: Props) => {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="black" />
+      <View
+        style={[
+          {backgroundColor: theme.backgroundColor},
+          styles.loadingContainer,
+        ]}>
+        <ActivityIndicator size="large" color="blue" />
       </View>
     );
   }
@@ -117,14 +130,14 @@ const VideoPlayer = ({route}: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={{uri: image}} style={styles.backgroundImage}>
+      <View style={styles.overlay} />
       {!isFullScreen && (
         <>
-          <MainHeader title="Kitsunee" />
+          <MainHeader title="Kitsunee" whiteHeader={true} />
           <Text style={styles.title}>{episodeData.id.replace(/-/g, ' ')}</Text>
         </>
       )}
-
       <View style={styles.videoContainer}>
         <TouchableOpacity
           onPress={toggleFullScreen}
@@ -182,13 +195,13 @@ const VideoPlayer = ({route}: Props) => {
           </ScrollView>
         )}
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 export default VideoPlayer;
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     flex: 1,
     backgroundColor: colors.light,
@@ -240,7 +253,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingLeft: 30,
     fontWeight: '500',
-    color: colors.black,
+    color: colors.white,
   },
 
   fullScreenButtonContainer: (isFullScreen: boolean) => ({
@@ -255,14 +268,23 @@ const styles = StyleSheet.create({
   },
   episodes: {
     marginTop: 20,
-    width: 50,
+    width: width / 8,
     height: 50,
     flexDirection: 'row',
   },
   episodesContainer: {
     gap: 10,
-    marginLeft: 30,
+    marginLeft: 22,
     flexWrap: 'wrap',
     flexDirection: 'row',
+    marginRight: 20,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
 });

@@ -7,6 +7,8 @@ import {IKitsuneeInfo} from '../constants/app.type';
 import {colors, sizes, spacing} from '../constants/theme';
 
 import FavoriteButton from './favorite-button';
+import useTheme from '../helper/themHelper';
+import {Theme} from '../constants/themeProvider';
 
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
@@ -17,6 +19,7 @@ interface AnimeListProps {
 }
 
 const AnimeList = (props: AnimeListProps) => {
+  const theme = useTheme();
   const {animeData, isSearchResult} = props;
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,10 +40,10 @@ const AnimeList = (props: AnimeListProps) => {
   return (
     <View style={styles.container}>
       {isLoading || animeData.length === 0 ? (
-        <SkeletonPlaceholder>
+        <SkeletonPlaceholder backgroundColor={theme.backgroundColor}>
           <>
             {[...Array(4)].map((_, index) => (
-              <View style={styles.cardContainer} key={index}>
+              <View key={index} style={styles.cardContainer}>
                 <SkeletonPlaceholder.Item
                   flexDirection="row"
                   alignItems="center"
@@ -66,7 +69,7 @@ const AnimeList = (props: AnimeListProps) => {
             style={styles.cardContainer}
             key={item.id}
             onPress={() => navigation.navigate('AnimeDetail', {detail: item})}>
-            <View style={[styles.card]} key={item.id}>
+            <View style={styles.card(theme)} key={item.id}>
               <View style={styles.imageBox}>
                 <Image
                   style={styles.image}
@@ -77,11 +80,15 @@ const AnimeList = (props: AnimeListProps) => {
               </View>
               <View style={styles.footer}>
                 <View style={styles.titleBox}>
-                  <Text style={styles.title}>{truncate(item.title, 10)}</Text>
+                  <Text style={styles.title(theme)}>
+                    {truncate(item.title, 10)}
+                  </Text>
                   {isSearchResult ? (
-                    <Text style={styles.subOrDub}>{item?.subOrDub}</Text>
+                    <Text style={[{color: theme.textColor}, styles.subOrDub]}>
+                      {item?.subOrDub}
+                    </Text>
                   ) : (
-                    <Text style={styles.episode}>
+                    <Text style={styles.episode(theme)}>
                       Episodes {item?.episodeNumber || item?.episodes?.length}
                     </Text>
                   )}
@@ -96,7 +103,7 @@ const AnimeList = (props: AnimeListProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     flexWrap: 'wrap',
     flexDirection: 'row',
@@ -105,14 +112,14 @@ const styles = StyleSheet.create({
     marginLeft: spacing.l,
     marginBottom: spacing.l,
   },
-  card: {
+  card: (theme: Theme) => ({
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     borderRadius: sizes.radius,
-    backgroundColor: colors.white,
+    backgroundColor: theme.cardColor,
     borderWidth: 1,
-    borderColor: '#ddd',
-  },
+    borderColor: theme.backgroundColor,
+  }),
   imageBox: {
     width: CARD_WIDTH,
     overflow: 'hidden',
@@ -135,19 +142,18 @@ const styles = StyleSheet.create({
   titleBox: {
     flex: 1,
   },
-  title: {
+  title: (theme: Theme) => ({
     marginVertical: 4,
     fontWeight: 'bold',
     fontSize: sizes.body,
-    color: colors.primary,
-  },
-  episode: {
+    color: theme.textColor,
+  }),
+  episode: (theme: Theme) => ({
     fontSize: sizes.body,
-    color: colors.lightGray,
-  },
+    color: theme.textColor,
+  }),
   subOrDub: {
     fontWeight: 'bold',
-    color: colors.black,
   },
 });
 export default AnimeList;

@@ -13,12 +13,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AnimeList from '../componets/anime-list';
 import MainHeader from '../componets/MainHeader';
 
-import {colors} from '../constants/theme';
 import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
+import useTheme from '../helper/themHelper';
 
 const {height} = Dimensions.get('window');
 
 const FavoriteScreen = () => {
+  const theme = useTheme();
   const [animeDetails, setAnimeDetails] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState([]);
 
@@ -51,7 +52,7 @@ const FavoriteScreen = () => {
   }, [bookmarkedIds]);
 
   return (
-    <View style={styles.main}>
+    <View style={[{backgroundColor: theme.backgroundColor}, styles.main]}>
       <MainHeader title="Favorite" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
@@ -77,7 +78,6 @@ export default FavoriteScreen;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: colors.light,
   },
   content: {
     marginTop: 20,

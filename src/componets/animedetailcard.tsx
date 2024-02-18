@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
@@ -24,6 +25,8 @@ interface IProps {
   data: IKitsuneeInfo;
 }
 
+const {width} = Dimensions.get('window');
+
 const AnimeDetailCard = ({data, id}: IProps) => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
@@ -35,7 +38,7 @@ const AnimeDetailCard = ({data, id}: IProps) => {
     state => state.notification.notificationCount,
   );
   useEffect(() => {
-    dispatch(storeEpisodes(data.episodes));
+    dispatch(storeEpisodes(data.episodes, data.image));
   }, [data.episodes, dispatch]);
 
   useEffect(() => {
@@ -63,7 +66,10 @@ const AnimeDetailCard = ({data, id}: IProps) => {
       }`;
 
   const navigateToVideoPlayer = (episode, allEpisodes) => {
-    navigation.navigate('VideoPlayer', {episodeData: episode, allEpisodes});
+    navigation.navigate('VideoPlayer', {
+      episodeData: episode,
+      allEpisodes,
+    });
   };
 
   return (
@@ -146,7 +152,7 @@ const styles = StyleSheet.create({
   },
   episodes: {
     marginTop: 20,
-    width: 50,
+    width: width / 8,
     height: 50,
     flexDirection: 'row',
   },

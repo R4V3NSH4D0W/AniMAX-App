@@ -4,7 +4,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import AnimeList from './anime-list';
 import {kitsuneeFetchRecentAnime} from '../api/api.helper';
-import {colors} from '../constants/theme';
+import useTheme from '../helper/themHelper';
+import {Theme} from '../constants/themeProvider';
 
 interface IProps {
   title?: string;
@@ -13,6 +14,7 @@ interface IProps {
   onPress: () => void;
 }
 const SectionHeader = ({title, onPress, buttonTitle}: IProps) => {
+  const theme = useTheme();
   const [Anime, setAnime] = useState<any[]>([]);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const SectionHeader = ({title, onPress, buttonTitle}: IProps) => {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title(theme)}>{title}</Text>
 
         <TouchableOpacity onPress={onPress}>
           <Text style={styles.text}>{buttonTitle}</Text>
@@ -37,7 +39,7 @@ const SectionHeader = ({title, onPress, buttonTitle}: IProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     padding: 20,
     paddingLeft: 25,
@@ -46,11 +48,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  title: {
+  title: (theme: Theme) => ({
     fontSize: 18,
     fontWeight: 'bold',
-    color: colors.black,
-  },
+    color: theme.textColor,
+  }),
   text: {
     color: 'blue',
   },

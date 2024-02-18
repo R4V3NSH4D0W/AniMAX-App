@@ -8,12 +8,13 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {colors} from '../constants/theme';
 import MainHeader from '../componets/MainHeader';
 import {KitsuneeSearch, kitsuneeFetchRecentAnime} from '../api/api.helper';
 import AnimeList from '../componets/anime-list';
+import useTheme from '../helper/themHelper';
 
 const SearchScreen = () => {
+  const theme = useTheme();
   const searchInputRef = useRef<TextInput>(null);
   const [Anime, setAnime] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,21 +44,23 @@ const SearchScreen = () => {
   }, []);
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <View style={styles.container}>
+      <View
+        style={[{backgroundColor: theme.backgroundColor}, styles.container]}>
         <MainHeader title="Search" />
-        <View style={styles.search}>
+        <View style={[{borderColor: theme.textColor}, styles.search]}>
           <TextInput
-            style={styles.searchInput}
+            style={[{color: theme.textColor}, styles.searchInput]}
             ref={searchInputRef}
             placeholder="Search.."
             value={searchQuery}
-            placeholderTextColor={colors.black}
+            placeholderTextColor={theme.textColor}
             onChangeText={text => setSearchQuery(text)}
             onSubmitEditing={dismissKeyboard}
           />
+
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
             <View style={styles.searchIcon}>
-              <Icons name="search" size={20} color={colors.black} />
+              <Icons name="search" size={20} color={theme.textColor} />
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -82,7 +85,6 @@ const SearchScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.light,
     flex: 1,
   },
   search: {
@@ -101,12 +103,10 @@ const styles = StyleSheet.create({
   },
   resultsContainer: {
     flex: 1,
-    backgroundColor: colors.light,
   },
   searchInput: {
     width: '100%',
     height: '100%',
-    color: colors.black,
   },
 });
 
