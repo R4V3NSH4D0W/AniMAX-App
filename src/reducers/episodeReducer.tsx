@@ -9,11 +9,12 @@ const initialState = {
 const episodesReducer = (state = initialState, action) => {
   switch (action.type) {
     case STORE_EPISODES:
-      const {episodes, image} = action.payload;
+      const {episodes, image, id} = action.payload;
       return {
         ...state,
         episodes: episodes,
         image: image,
+        animeID: id,
       };
     default:
       return state;

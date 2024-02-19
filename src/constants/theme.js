@@ -19,7 +19,7 @@ export const colors = {
   darkGray: '#292929',
   midGray: '#353535',
   midLightGray: '#202123',
-  darkPurple: '#301934',
+  darkPurple: '#6C0BA9',
 };
 
 export const shadow = {

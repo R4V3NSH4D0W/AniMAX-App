@@ -9,11 +9,15 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useToast} from 'react-native-toast-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../utils/button';
-import {bookMark} from '../helper/bookmarkhelper';
+import {
+  bookMark,
+  fetchWatchedEpisodes,
+  isEpisodeWatched,
+} from '../helper/bookmarkhelper';
 
 import {ICONS} from '../constants/app.constants';
 import {IKitsuneeInfo} from '../constants/app.type';
@@ -31,6 +35,10 @@ const AnimeDetailCard = ({data, id}: IProps) => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [watchedEpisodes, setWatchedEpisodes] = useState<
+    {animeId: string; episodeId: string}[]
+  >([]);
+  const isFocused = useIsFocused();
   const toast = useToast();
   const navigation = useNavigation();
 
@@ -38,7 +46,7 @@ const AnimeDetailCard = ({data, id}: IProps) => {
     state => state.notification.notificationCount,
   );
   useEffect(() => {
-    dispatch(storeEpisodes(data.episodes, data.image));
+    dispatch(storeEpisodes(data.episodes, data.image, id));
   }, [data.episodes, dispatch]);
 
   useEffect(() => {
@@ -70,6 +78,14 @@ const AnimeDetailCard = ({data, id}: IProps) => {
       episodeData: episode,
       allEpisodes,
     });
+  };
+
+  useEffect(() => {
+    fetchWatchedEpisodes(setWatchedEpisodes);
+  }, [isFocused]);
+
+  const checkIfEpisodeWatched = episodeId => {
+    return isEpisodeWatched(id, episodeId, watchedEpisodes);
   };
 
   return (
@@ -111,7 +127,11 @@ const AnimeDetailCard = ({data, id}: IProps) => {
               <View key={index}>
                 <Button
                   title={episode.number.toString()}
-                  style={styles.episodes}
+                  style={[
+                    styles.episodes,
+                    checkIfEpisodeWatched(episode.number as number) &&
+                      styles.watchedEpisode,
+                  ]}
                   onPress={() => navigateToVideoPlayer(episode, data.episodes)}
                 />
               </View>
@@ -170,6 +190,9 @@ const styles = StyleSheet.create({
     gap: 10,
     flexWrap: 'wrap',
     flexDirection: 'row',
+  },
+  watchedEpisode: {
+    backgroundColor: colors.darkPurple,
   },
 });
 

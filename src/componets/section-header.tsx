@@ -11,7 +11,7 @@ interface IProps {
   title?: string;
   type?: string;
   buttonTitle?: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 const SectionHeader = ({title, onPress, buttonTitle}: IProps) => {
   const theme = useTheme();
@@ -30,9 +30,9 @@ const SectionHeader = ({title, onPress, buttonTitle}: IProps) => {
       <View style={styles.container}>
         <Text style={styles.title(theme)}>{title}</Text>
 
-        <TouchableOpacity onPress={onPress}>
+        {/* <TouchableOpacity onPress={onPress}>
           <Text style={styles.text}>{buttonTitle}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <AnimeList animeData={Anime} />
     </>

@@ -6,6 +6,8 @@ import Icon from './Icon';
 import {colors, sizes, spacing} from '../constants/theme';
 import useTheme from '../helper/themHelper';
 import {Theme} from '../constants/themeProvider';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 
 interface Iprops {
   title: string;
@@ -13,10 +15,15 @@ interface Iprops {
 }
 
 const MainHeader = ({title, whiteHeader}: Iprops) => {
+  const navigation = useNavigation();
   const theme = useTheme();
   const notificationCount = useSelector(
     state => state.notification.notificationCount,
   );
+
+  const handelNavigation = () => {
+    navigation.navigate('Favorite');
+  };
 
   return (
     <View style={[styles.container]}>
@@ -27,10 +34,12 @@ const MainHeader = ({title, whiteHeader}: Iprops) => {
       />
       <Text style={[{color: theme.textColor}, styles.title]}>{title}</Text>
       <View style={styles.notificationContainer}>
-        <Icon icon="Notification" style={styles.color(whiteHeader, theme)} />
-        {notificationCount > 0 && (
-          <Text style={styles.notificationText}>{notificationCount}</Text>
-        )}
+        <TouchableOpacity onPress={() => handelNavigation()}>
+          <Icon icon="Notification" style={styles.color(whiteHeader, theme)} />
+          {notificationCount > 0 && (
+            <Text style={styles.notificationText}>{notificationCount}</Text>
+          )}
+        </TouchableOpacity>
       </View>
     </View>
   );

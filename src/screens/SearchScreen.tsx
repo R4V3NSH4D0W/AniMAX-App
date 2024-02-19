@@ -60,7 +60,11 @@ const SearchScreen = () => {
 
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
             <View style={styles.searchIcon}>
-              <Icons name="search" size={20} color={theme.textColor} />
+              <Icons
+                name="Enter any Keywords"
+                size={20}
+                color={theme.textColor}
+              />
             </View>
           </TouchableWithoutFeedback>
         </View>

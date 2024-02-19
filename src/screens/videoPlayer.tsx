@@ -20,9 +20,15 @@ import {KitsuneeFetchVideo} from '../api/api.helper';
 import Button from '../utils/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useTheme from '../helper/themHelper';
 import {Picker} from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  fetchWatchedEpisodes,
+  isEpisodeWatched,
+  markEpisodeAsWatched,
+} from '../helper/bookmarkhelper';
 
 interface Source {
   quality: string;
@@ -54,6 +60,7 @@ const VideoPlayer = ({route}: Props) => {
 
   const image = useSelector(state => state.episodes.image);
   const storedEpisodes = useSelector(state => state.episodes.episodes);
+  const animeID = useSelector(state => state.episodes.animeID);
 
   const [anime, setAnime] = useState<Anime | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -61,7 +68,11 @@ const VideoPlayer = ({route}: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isVideoLoading, setIsVideoLoading] = useState(true);
+  const [watchedEpisodes, setWatchedEpisodes] = useState<
+    {animeId: string; episodeId: string}[]
+  >([]);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchEpisode = async () => {
@@ -96,6 +107,33 @@ const VideoPlayer = ({route}: Props) => {
       };
     }
   }, [isFullScreen]);
+
+  useEffect(() => {
+    if (!isFocused) {
+      setIsLoading(true);
+      setIsVideoLoading(true);
+      setAnime(null);
+      setVideoUrl(null);
+      setSelectedQuality(null);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    fetchWatchedEpisodes(setWatchedEpisodes);
+  }, [isFocused]);
+
+  const handleMarkEpisodeAsWatched = async () => {
+    await markEpisodeAsWatched(
+      animeID,
+      episodeData,
+      watchedEpisodes,
+      setWatchedEpisodes,
+    );
+  };
+
+  const checkIfEpisodeWatched = episodeId => {
+    return isEpisodeWatched(animeID, episodeId, watchedEpisodes);
+  };
 
   const handleBackButtonPress = () => {
     if (isFullScreen) {
@@ -146,6 +184,7 @@ const VideoPlayer = ({route}: Props) => {
       </View>
     );
   }
+
   const navigateToVideoPlayer = episode => {
     navigation.navigate('VideoPlayer', {episodeData: episode});
   };
@@ -180,7 +219,11 @@ const VideoPlayer = ({route}: Props) => {
         </TouchableOpacity>
         {isVideoLoading ? (
           <View style={styles.videoLoadingContainer}>
-            <ActivityIndicator size="large" color="blue" />
+            <ActivityIndicator
+              size="large"
+              color="blue"
+              style={{paddingTop: 40}}
+            />
           </View>
         ) : (
           <Video
@@ -188,6 +231,7 @@ const VideoPlayer = ({route}: Props) => {
             style={isFullScreen ? styles.fullScreenVideo : styles.video}
             controls={true}
             resizeMode="contain"
+            onEnd={handleMarkEpisodeAsWatched}
           />
         )}
 
@@ -210,8 +254,7 @@ const VideoPlayer = ({route}: Props) => {
         )}
 
         {!isFullScreen && (
-          <View style={styles.episode}>
-            <Text style={styles.episodeText}>Episodes</Text>
+          <View>
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.episodesContainer}>
@@ -220,7 +263,12 @@ const VideoPlayer = ({route}: Props) => {
                   <Button
                     isCurrentEpisode={currentEpisode(episode.id)}
                     title={episode.number.toString()}
-                    style={styles.episodes}
+                    style={[
+                      styles.episodes,
+                      !currentEpisode(episode.id) &&
+                        checkIfEpisodeWatched(episode.number as number) &&
+                        styles.watchedEpisode,
+                    ]}
                     onPress={() => navigateToVideoPlayer(episode)}
                   />
                 </View>
@@ -235,7 +283,7 @@ const VideoPlayer = ({route}: Props) => {
 
 export default VideoPlayer;
 
-const styles = StyleSheet.create<any>({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.light,
@@ -303,6 +351,9 @@ const styles = StyleSheet.create<any>({
     width: width / 8,
     height: 50,
     flexDirection: 'row',
+  },
+  watchedEpisode: {
+    backgroundColor: colors.darkPurple,
   },
   episodesContainer: {
     gap: 10,

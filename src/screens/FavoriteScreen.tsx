@@ -1,4 +1,3 @@
-import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -7,19 +6,22 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+import {useDispatch} from 'react-redux';
+import React, {useState, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AnimeList from '../componets/anime-list';
 import MainHeader from '../componets/MainHeader';
 
-import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
 import useTheme from '../helper/themHelper';
+import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
 
 const {height} = Dimensions.get('window');
 
 const FavoriteScreen = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [animeDetails, setAnimeDetails] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState([]);
 
@@ -33,6 +35,10 @@ const FavoriteScreen = () => {
       setBookmarkedIds(parsedIds);
     }
   };
+
+  useEffect(() => {
+    dispatch({type: 'RESET_NOTIFICATION_COUNT'});
+  }, [isFocused, dispatch]);
 
   useEffect(() => {
     fetchBookmarkedIds();
