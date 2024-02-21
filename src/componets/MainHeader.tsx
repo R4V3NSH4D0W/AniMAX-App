@@ -1,13 +1,12 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
-
-import Icon from './Icon';
-import {colors, sizes, spacing} from '../constants/theme';
-import useTheme from '../helper/themHelper';
-import {Theme} from '../constants/themeProvider';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, {useState, useRef} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {toggleMode} from '../actions/action';
 import {useNavigation} from '@react-navigation/native';
+import useTheme from '../helper/themHelper';
+import {colors, sizes, spacing} from '../constants/theme';
+import {Theme} from '../constants/themeProvider';
+import Icon from './Icon';
 
 interface Iprops {
   title: string;
@@ -20,21 +19,45 @@ const MainHeader = ({title, whiteHeader}: Iprops) => {
   const notificationCount = useSelector(
     state => state.notification.notificationCount,
   );
+  const mode = useSelector(state => state.mode);
+  console.log(mode);
+  const dispatch = useDispatch();
+
+  const [isOn, setIsOn] = useState(false);
+  const translateXValue = useRef(new Animated.Value(0)).current;
 
   const handelNavigation = () => {
     navigation.navigate('Favorite');
   };
 
+  const toggleHandle = () => {
+    setIsOn(!isOn);
+    Animated.spring(translateXValue, {
+      toValue: isOn ? 0 : 32,
+      useNativeDriver: false,
+    }).start();
+    dispatch(toggleMode());
+  };
+
   return (
     <View style={[styles.container]}>
-      <Icon
-        icon="Hamburger"
-        style={styles.color(whiteHeader, theme)}
-        onPress={() => {}}
-      />
+      <TouchableOpacity onPress={toggleHandle}>
+        <View
+          style={[
+            styles.toggleButton,
+            {backgroundColor: mode === 'Manga' ? 'limegreen' : 'gray'},
+          ]}>
+          <Animated.View
+            style={[
+              styles.circle,
+              {transform: [{translateX: translateXValue}]},
+            ]}
+          />
+        </View>
+      </TouchableOpacity>
       <Text style={[{color: theme.textColor}, styles.title]}>{title}</Text>
       <View style={styles.notificationContainer}>
-        <TouchableOpacity onPress={() => handelNavigation()}>
+        <TouchableOpacity onPress={handelNavigation}>
           <Icon icon="Notification" style={styles.color(whiteHeader, theme)} />
           {notificationCount > 0 && (
             <Text style={styles.notificationText}>{notificationCount}</Text>
@@ -74,6 +97,19 @@ const styles = StyleSheet.create<any>({
   color: (whiteHeader: boolean, theme: Theme) => ({
     tintColor: whiteHeader ? colors.white : theme.tintColor,
   }),
+  toggleButton: {
+    width: 64,
+    height: 32,
+    borderRadius: 32,
+    padding: 4,
+    justifyContent: 'center',
+  },
+  circle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'white',
+  },
 });
 
 export default MainHeader;

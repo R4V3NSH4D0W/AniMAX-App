@@ -71,8 +71,13 @@ const VideoPlayer = ({route}: Props) => {
   const [watchedEpisodes, setWatchedEpisodes] = useState<
     {animeId: string; episodeId: string}[]
   >([]);
+  const [videoDuration, setVideoDuration] = useState(0);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+
+  const handleLoad = ({duration}) => {
+    setVideoDuration(duration);
+  };
 
   useEffect(() => {
     const fetchEpisode = async () => {
@@ -231,7 +236,13 @@ const VideoPlayer = ({route}: Props) => {
             style={isFullScreen ? styles.fullScreenVideo : styles.video}
             controls={true}
             resizeMode="contain"
-            onEnd={handleMarkEpisodeAsWatched}
+            onProgress={data => {
+              const middlePoint = videoDuration / 3;
+              if (data.currentTime > middlePoint) {
+                handleMarkEpisodeAsWatched();
+              }
+            }}
+            onLoad={handleLoad}
           />
         )}
 
