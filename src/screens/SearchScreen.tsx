@@ -51,7 +51,7 @@ const SearchScreen = () => {
           <TextInput
             style={[{color: theme.textColor}, styles.searchInput]}
             ref={searchInputRef}
-            placeholder="Search.."
+            placeholder="Enter any Keyword..."
             value={searchQuery}
             placeholderTextColor={theme.textColor}
             onChangeText={text => setSearchQuery(text)}
@@ -60,11 +60,7 @@ const SearchScreen = () => {
 
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
             <View style={styles.searchIcon}>
-              <Icons
-                name="Enter any Keywords"
-                size={20}
-                color={theme.textColor}
-              />
+              <Icons name="search" size={20} color={theme.textColor} />
             </View>
           </TouchableWithoutFeedback>
         </View>
