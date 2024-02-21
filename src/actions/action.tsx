@@ -23,3 +23,9 @@ export const resetNotificationCount = () => {
     type: RESET_NOTIFICATION_COUNT,
   };
 };
+
+export const TOGGLE_MODE = 'TOGGLE_MODE';
+
+export const toggleMode = () => ({
+  type: TOGGLE_MODE,
+});
