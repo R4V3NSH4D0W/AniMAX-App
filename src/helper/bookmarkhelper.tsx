@@ -3,12 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Dispatch, SetStateAction} from 'react';
 
 export const bookMark = async (
-  toast: any,
-  dispatch: any,
   animeId: string,
   bookmarked: boolean,
-  notificationCount: number,
   setBookmarked: Dispatch<SetStateAction<boolean>>,
+  toast: any,
+  dispatch: Dispatch<any>,
+  notificationCount: number,
 ): Promise<void> => {
   try {
     const bookmarkedIds = await AsyncStorage.getItem('bookmarkedIds');
@@ -38,7 +38,6 @@ export const bookMark = async (
       });
     }
   } catch (error) {
-    console.error('Error bookmarking:', error);
     toast.show('', {
       type: 'custom_toast',
       data: {title: 'Error Bookmarking', type: 'error'},
@@ -82,7 +81,7 @@ export const markEpisodeAsWatched = async (
 
 export const isEpisodeWatched = (
   animeID: string,
-  episodeId: number,
+  episodeId: string,
   watchedEpisodes: any[],
 ): boolean => {
   return watchedEpisodes.some(
