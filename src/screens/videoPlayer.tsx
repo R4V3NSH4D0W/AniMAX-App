@@ -231,7 +231,7 @@ const VideoPlayer = ({route}: Props) => {
             style={isFullScreen ? styles.fullScreenVideo : styles.video}
             controls={true}
             resizeMode="contain"
-            onEnd={handleMarkEpisodeAsWatched}
+            onLoad={handleMarkEpisodeAsWatched}
           />
         )}
 
