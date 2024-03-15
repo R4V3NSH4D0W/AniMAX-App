@@ -101,27 +101,30 @@ const AnimeDetailCard = ({data, id}: IProps) => {
           <TouchableOpacity onPress={toggleExpanded}>
             <Text style={styles.description}>{descriptionText}</Text>
           </TouchableOpacity>
-          <Text style={styles.subText}>{data?.otherName}</Text>
+          {/* <Text style={styles.subText}>{data?.otherName}</Text> */}
           <Text style={styles.subTitle}>Status: {data?.status}</Text>
           <Text style={styles.subText}>Release Date: {data?.releaseDate}</Text>
           <Text style={styles.subText}>Genre: {data?.genres?.join(', ')}</Text>
 
-          <Button
-            hasIcon
-            bookmarked={bookmarked}
-            title={bookmarked ? 'Bookmarked' : 'Bookmark'}
-            iconName={ICONS.BOOKMARK}
-            onPress={() =>
-              bookMark(
-                id,
-                bookmarked,
-                setBookmarked,
-                toast,
-                dispatch,
-                notificationCount,
-              )
-            }
-          />
+          <View style={{width: '40%'}}>
+            <Button
+              hasIcon
+              bookmarked={bookmarked}
+              title={bookmarked ? 'Bookmarked' : 'Bookmark'}
+              iconName={ICONS.BOOKMARK}
+              onPress={() =>
+                bookMark(
+                  id,
+                  bookmarked,
+                  setBookmarked,
+                  toast,
+                  dispatch,
+                  notificationCount,
+                )
+              }
+            />
+          </View>
+
           <View style={styles.episodesContainer}>
             {data?.episodes?.map((episode, index) => (
               <View key={index}>
