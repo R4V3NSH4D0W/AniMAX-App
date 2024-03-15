@@ -1,17 +1,18 @@
 import {updateNotificationCount} from '../actions/action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Dispatch, SetStateAction} from 'react';
 
 export const bookMark = async (
   animeId: string,
   bookmarked: boolean,
-  setBookmarked: React.Dispatch<React.SetStateAction<boolean>>,
+  setBookmarked: Dispatch<SetStateAction<boolean>>,
   toast: any,
-  dispatch: any,
+  dispatch: Dispatch<any>,
   notificationCount: number,
-) => {
+): Promise<void> => {
   try {
     const bookmarkedIds = await AsyncStorage.getItem('bookmarkedIds');
-    let updatedIds = [];
+    let updatedIds: string[] = [];
     if (bookmarkedIds) {
       updatedIds = JSON.parse(bookmarkedIds);
     }
@@ -44,23 +45,25 @@ export const bookMark = async (
   }
 };
 
-export const fetchWatchedEpisodes = async setWatchedEpisodes => {
+export const fetchWatchedEpisodes = async (
+  setWatchedEpisodes: Dispatch<SetStateAction<any>>,
+): Promise<void> => {
   try {
     const jsonValue = await AsyncStorage.getItem('watchedEpisodes');
     if (jsonValue !== null) {
       setWatchedEpisodes(JSON.parse(jsonValue));
     }
-  } catch (e) {
-    console.error('Failed to fetch watched episodes: ', e);
+  } catch (error) {
+    console.error('Failed to fetch watched episodes: ', error);
   }
 };
 
 export const markEpisodeAsWatched = async (
-  animeID,
-  episodeData,
-  watchedEpisodes,
-  setWatchedEpisodes,
-) => {
+  animeID: string,
+  episodeData: any,
+  watchedEpisodes: any[],
+  setWatchedEpisodes: Dispatch<SetStateAction<any[]>>,
+): Promise<void> => {
   const updatedWatchedEpisodes = [
     ...watchedEpisodes,
     {animeId: animeID, episodeId: episodeData.number},
@@ -71,12 +74,16 @@ export const markEpisodeAsWatched = async (
       JSON.stringify(updatedWatchedEpisodes),
     );
     setWatchedEpisodes(updatedWatchedEpisodes);
-  } catch (e) {
-    console.error('Failed to mark episode as watched: ', e);
+  } catch (error) {
+    console.error('Failed to mark episode as watched: ', error);
   }
 };
 
-export const isEpisodeWatched = (animeID, episodeId, watchedEpisodes) => {
+export const isEpisodeWatched = (
+  animeID: string,
+  episodeId: string,
+  watchedEpisodes: any[],
+): boolean => {
   return watchedEpisodes.some(
     episode => episode.animeId === animeID && episode.episodeId === episodeId,
   );

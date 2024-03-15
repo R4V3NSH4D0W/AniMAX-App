@@ -236,13 +236,7 @@ const VideoPlayer = ({route}: Props) => {
             style={isFullScreen ? styles.fullScreenVideo : styles.video}
             controls={true}
             resizeMode="contain"
-            onProgress={data => {
-              const middlePoint = videoDuration / 3;
-              if (data.currentTime > middlePoint) {
-                handleMarkEpisodeAsWatched();
-              }
-            }}
-            onLoad={handleLoad}
+            onLoad={handleMarkEpisodeAsWatched}
           />
         )}
 

@@ -42,8 +42,8 @@ export default Button;
 const styles = StyleSheet.create({
   main: (disabled: boolean, isCurrentEpisode: boolean) => ({
     gap: 10,
+    border: 10,
     padding: 10,
-    width: '40%',
     borderRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
