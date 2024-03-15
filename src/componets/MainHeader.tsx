@@ -10,10 +10,11 @@ import Icon from './Icon';
 
 interface Iprops {
   title: string;
+  showToggle?: boolean;
   whiteHeader?: boolean;
 }
 
-const MainHeader = ({title, whiteHeader}: Iprops) => {
+const MainHeader = ({title, whiteHeader, showToggle}: Iprops) => {
   const navigation = useNavigation();
   const theme = useTheme();
   const notificationCount = useSelector(
@@ -41,20 +42,22 @@ const MainHeader = ({title, whiteHeader}: Iprops) => {
 
   return (
     <View style={[styles.container]}>
-      <TouchableOpacity onPress={toggleHandle}>
-        <View
-          style={[
-            styles.toggleButton,
-            {backgroundColor: mode === 'Manga' ? 'limegreen' : 'gray'},
-          ]}>
-          <Animated.View
+      {showToggle && (
+        <TouchableOpacity onPress={toggleHandle}>
+          <View
             style={[
-              styles.circle,
-              {transform: [{translateX: translateXValue}]},
-            ]}
-          />
-        </View>
-      </TouchableOpacity>
+              styles.toggleButton,
+              {backgroundColor: mode === 'Manga' ? 'limegreen' : 'gray'},
+            ]}>
+            <Animated.View
+              style={[
+                styles.circle,
+                {transform: [{translateX: translateXValue}]},
+              ]}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
       <Text style={[{color: theme.textColor}, styles.title]}>{title}</Text>
       <View style={styles.notificationContainer}>
         <TouchableOpacity onPress={handelNavigation}>

@@ -30,3 +30,23 @@ export const KitsuneeSearch = async (query: string) => {
   const data = response.json();
   return data;
 };
+
+export const mangalist = async () => {
+  const response = await fetch('https://api.mangadex.org/manga');
+  const data = response.json();
+  return data;
+};
+export const getCoverFileName = async (id: string) => {
+  const response = await fetch(`https://api.mangadex.org/cover/${id}`);
+  const data = response.json();
+  console.log('response data', data);
+  return data;
+};
+
+export const mangadexCover = async (id: string, fileName: string) => {
+  const response = await fetch(
+    `https://uploads.mangadex.org/covers/${id}/${fileName}.png`,
+  );
+  const data = response.json();
+  return data;
+};
