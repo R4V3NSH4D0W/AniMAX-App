@@ -81,5 +81,40 @@ export interface Manga {
     id: string;
     type: string;
   }[];
-  coverFileName: string;
+  coverImage: string;
+}
+
+export interface MangaDetails {
+  id: string;
+  title: string;
+  altTitles: {
+    [key: string]: string;
+  }[];
+  description: {
+    [key: string]: string;
+  };
+  genres: string[];
+  themes: string[];
+  status: string;
+  releaseDate: number;
+  chapters: {
+    id: string;
+    title: string;
+    chapterNumber: string;
+    volumeNumber: string;
+    pages: number;
+  }[];
+  image: string;
+  coverImage: string;
+  relationships: {
+    id: string;
+    type: string;
+    related?: string;
+  }[];
+  type: string;
+}
+
+export interface MangaPage {
+  img: string;
+  page: number;
 }

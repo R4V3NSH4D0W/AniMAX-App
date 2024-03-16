@@ -12,29 +12,50 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Icon from '../componets/Icon';
 import {colors, spacing} from '../constants/theme';
-import {kitsuneeFetchAnimeInfo} from '../api/api.helper';
+import {fetchMangaDetail, kitsuneeFetchAnimeInfo} from '../api/api.helper';
 import AnimeDetailCard from '../componets/animedetailcard';
 import useTheme from '../helper/themHelper';
+import {useSelector} from 'react-redux';
+import MangaDetailCard from '../componets/mangaComponets/mangadetailcard';
+import {MangaDetails} from '../constants/app.type';
 
 const {height, width} = Dimensions.get('window');
 
 const AnimeDetail = ({navigation, route}: any) => {
   const theme = useTheme();
+  const {mode} = useSelector(state => state.mode);
   const insets = useSafeAreaInsets();
   const {detail} = route.params;
+  console.log('detail', detail);
 
   const [animeDetail, setAnimeDetail] = useState([]);
+  const [MangaDetail, setMangaDetail] = useState<MangaDetails>({});
   const [loading, setLoading] = useState(false);
+  // console.log('animeDetail', animeDetail);
+  console.log('Detail', detail.id);
+  console.log('MangaDetail', MangaDetail);
 
   useEffect(() => {
+    if (mode === 'Anime') {
+      getAnimeDetail();
+    } else {
+      getMangaDetail();
+    }
+  }, [mode]);
+
+  const getAnimeDetail = async () => {
     setLoading(true);
-    const getAnimeDetail = async () => {
-      const result = await kitsuneeFetchAnimeInfo(detail.id);
-      setAnimeDetail(result);
-      setLoading(false);
-    };
-    getAnimeDetail();
-  }, [detail.id]);
+    const result = await kitsuneeFetchAnimeInfo(detail.id);
+    setAnimeDetail(result);
+    setLoading(false);
+  };
+
+  const getMangaDetail = async () => {
+    setLoading(true);
+    const result = await fetchMangaDetail(detail.id);
+    setMangaDetail(result);
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -57,16 +78,31 @@ const AnimeDetail = ({navigation, route}: any) => {
             id={`anime.${detail.id}.image`}
             style={StyleSheet.absoluteFillObject}>
             <View style={[StyleSheet.absoluteFillObject, styles.imageBox]}>
-              <Image
-                source={{
-                  uri: animeDetail.image,
-                }}
-                style={styles.image}
-              />
+              {mode === 'Anime' ? (
+                <Image
+                  source={{
+                    uri: animeDetail.image,
+                  }}
+                  style={styles.image}
+                />
+              ) : (
+                <Image
+                  source={{
+                    uri:
+                      MangaDetail.image ||
+                      'https://w.wallhaven.cc/full/l8/wallhaven-l8vp7y.jpg',
+                  }}
+                  style={styles.image}
+                />
+              )}
               <View style={styles.overlay} />
             </View>
           </SharedElement>
-          <AnimeDetailCard data={animeDetail} id={animeDetail.id} />
+          {mode === 'Anime' ? (
+            <AnimeDetailCard data={animeDetail} id={animeDetail.id} />
+          ) : (
+            <MangaDetailCard manga={MangaDetail} id={MangaDetail.id} />
+          )}
         </>
       ) : (
         <View

@@ -16,6 +16,17 @@ export const storeEpisodes = (episodes, image, id) => ({
   },
 });
 
+export const STORE_CHAPTERS = 'STORE_CHAPTERS';
+
+export const storeChapters = (chapters, image, id) => ({
+  type: STORE_CHAPTERS,
+  payload: {
+    chapters: chapters,
+    image: image,
+    id: id,
+  },
+});
+
 export const RESET_NOTIFICATION_COUNT = 'RESET_NOTIFICATION_COUNT';
 
 export const resetNotificationCount = () => {

@@ -7,6 +7,7 @@ import {colors} from '../constants/theme';
 interface ButtonProps {
   title: string;
   style?: any;
+  typeChapter?: boolean;
   bookmarked?: boolean;
   iconName?: string;
   hasIcon?: boolean;

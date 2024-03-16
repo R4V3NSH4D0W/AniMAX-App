@@ -1,12 +1,16 @@
-import React, {useEffect} from 'react';
+import {Image} from 'react-native-animatable';
+import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+
 import {Manga} from '../../constants/app.type';
-import useTheme from '../../helper/themHelper';
 import {Theme} from '../../constants/themeProvider';
 import {sizes, spacing} from '../../constants/theme';
-import {Image} from 'react-native-animatable';
-import {getCoverFileName} from '../../api/api.helper';
+
+import useTheme from '../../helper/themHelper';
 import FavoriteButton from '../favorite-button';
+import {getCoverFileName} from '../../api/api.helper';
 
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = sizes.width / 2 - (spacing.l + spacing.l / 2);
@@ -17,10 +21,17 @@ interface IProps {
 
 const MangaList: React.FC<IProps> = props => {
   const {manga} = props;
+
   const theme = useTheme();
-  console.log('Manga', manga);
+  const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
+    setIsLoading(true);
+
     const fetchCoverFileNames = async () => {
+      let loadedImagesCount = 0;
+
       for (const item of manga) {
         const coverArtID = item.relationships.find(
           relationship => relationship.type === 'cover_art',
@@ -28,8 +39,15 @@ const MangaList: React.FC<IProps> = props => {
         const fileNameResponse = await getCoverFileName(
           coverArtID?.id as string,
         );
+
         const fileName = fileNameResponse?.data?.attributes?.fileName;
-        item.coverFileName = fileName;
+        item.coverImage = `https://uploads.mangadex.org/covers/${item.id}/${fileName}`;
+
+        loadedImagesCount++;
+
+        if (loadedImagesCount === manga.length) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -45,24 +63,53 @@ const MangaList: React.FC<IProps> = props => {
   return (
     <>
       <View style={styles.container}>
-        {manga?.map(item => (
-          <TouchableOpacity key={item?.id}>
-            <View style={styles.card(theme)} key={item.id}>
-              {/* <Text>{item?.attributes.title.en}</Text> */}
-              <View style={styles.imageBox}>
-                <Image
-                  style={styles.image}
-                  source={{
-                    uri: `https://uploads.mangadex.org/covers/${item.id}/${item.coverFileName}`,
-                  }}
-                />
-              </View>
-              <View style={styles.footer}>
-                <View style={styles.titleBox}>
-                  <Text style={styles.title(theme)}>
-                    {truncate(item?.attributes.title.en, 10)}
-                  </Text>
-                  {/* {isSearchResult ? (
+        {isLoading ? (
+          <SkeletonPlaceholder backgroundColor={theme.backgroundColor}>
+            <>
+              {[...Array(4)].map((_, index) => (
+                <View key={index} style={styles.cardContainer}>
+                  <SkeletonPlaceholder.Item
+                    flexDirection="row"
+                    alignItems="center"
+                    gap={20}>
+                    <SkeletonPlaceholder.Item
+                      width={CARD_WIDTH}
+                      height={CARD_HEIGHT - 60}
+                      borderRadius={sizes.radius}
+                    />
+                    <SkeletonPlaceholder.Item
+                      width={CARD_WIDTH}
+                      height={CARD_HEIGHT - 60}
+                      borderRadius={sizes.radius}
+                    />
+                  </SkeletonPlaceholder.Item>
+                </View>
+              ))}
+            </>
+          </SkeletonPlaceholder>
+        ) : (
+          manga?.map(item => (
+            <TouchableOpacity
+              key={item?.id}
+              onPress={() =>
+                navigation.navigate('AnimeDetail', {detail: item})
+              }>
+              <View style={styles.card(theme)} key={item.id}>
+                {/* <Text>{item?.attributes.title.en}</Text> */}
+                <View style={styles.imageBox}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: item.coverImage,
+                    }}
+                  />
+                </View>
+                <View style={styles.footer}>
+                  <View style={styles.titleBox}>
+                    <Text style={styles.title(theme)}>
+                      {truncate(item?.attributes.title.en, 10)}
+                    </Text>
+                    {/* {isSearchResult ? (
                     <Text style={[{color: theme.textColor}, styles.subOrDub]}>
                       {item?.subOrDub}
                     </Text>
@@ -71,29 +118,30 @@ const MangaList: React.FC<IProps> = props => {
                       Episodes {item?.episodeNumber || item?.episodes?.length}
                     </Text>
                   )} */}
+                  </View>
+                  <FavoriteButton />
                 </View>
-                <FavoriteButton />
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))
+        )}
       </View>
     </>
   );
 };
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     flexWrap: 'wrap',
     flexDirection: 'row',
+    marginHorizontal: 25,
     justifyContent: 'space-between',
-    margin: 30,
   },
   card: (theme: Theme) => ({
+    borderWidth: 1,
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     borderRadius: sizes.radius,
     backgroundColor: theme.cardColor,
-    borderWidth: 1,
     borderColor: theme.backgroundColor,
   }),
   imageBox: {
@@ -124,5 +172,8 @@ const styles = StyleSheet.create({
     fontSize: sizes.body,
     color: theme.textColor,
   }),
+  cardContainer: {
+    marginBottom: spacing.l,
+  },
 });
 export default MangaList;

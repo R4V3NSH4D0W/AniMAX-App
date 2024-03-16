@@ -6,6 +6,7 @@ import {ToastProvider} from 'react-native-toast-notifications';
 
 import TabNavigator from './TabNavigator';
 import VideoPlayer from '../screens/videoPlayer';
+import MangaViewer from '../screens/manga-viewer';
 import ToastComponent from '../componets/toast/toast';
 import AnimeDetail from '../screens/anime-detail-screen';
 
@@ -36,6 +37,11 @@ const MainNavigator = () => {
           <Stack.Screen
             name="VideoPlayer"
             component={VideoPlayer}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="MangaViewer"
+            component={MangaViewer}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
